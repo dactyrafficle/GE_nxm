@@ -2,9 +2,9 @@
 
 There are:
 
- *n consumers
- *m firms
- *each firm makes 1 good, which is different from every other good
+ * n consumers
+ * m firms
+ * each firm makes 1 good, which is different from every other good
  
 The approach I'm using to solve this is very naive. 
 
