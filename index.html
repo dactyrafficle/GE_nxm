@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.css" integrity="sha384-t5CR+zwDAROtph0PXGte6ia8heboACF9R5l/DiY+WZ3P2lxNgvJkQk5n7GPvLMYw" crossorigin="anonymous">
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/katex.min.js" integrity="sha384-FaFLTlohFghEIZkw6VGwmf9ISTubWAVYW8tG8+w2LAIftJEULZABrF9PPFv+tVkH" crossorigin="anonymous"></script>
+
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.13.0/dist/contrib/auto-render.min.js" integrity="sha384-bHBqxz8fokvgoJ/sc17HODNxa42TlaEhB+w8ZJXTc2nZf1VgEaFZeZvT4Mznfz0v" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+
+<script>
+ window.addEventListener('load', function() {
+  let math = document.getElementsByClassName('math');
+  for (let i = 0; i < math.length; i++) {
+   katex.render(math[i].textContent, math[i]);
+  }
+ });
+</script>
+
+<link rel="stylesheet" href='ge.css'>
+
+<title> nxmxp economy </title>
+
+
+<style>
+
+html, body {
+ font-family: calibri;
+}
+.myinputs {
+  height: 30px;
+  width: 100px;
+  font-size: 17px;
+  text-align: center;
+}
+
+.mytables {
+ border-collapse: collapse;
+ margin: 1vh;
+}
+.mytables td {
+ border: 1px solid #ddd;
+ padding: 0.25vh 1vh;
+}
+
+.results td {
+  text-align: right;
+}
+.results tr td:nth-child(1) {
+  text-align: left;
+}
+
+.sub-section {
+ display: inline-block;
+ vertical-align: top;
+}
+
+.solved-prices {
+ background-color: #ffe6b3;
+}
+.consumers-totals {
+ background-color: #ffe6b3;
+}
+.firms-totals {
+ background-color: #ffe6b3;
+}
+
+</style>
+
+<body>
+
+<div class='section'>
+
+<div class='sub-section'>
+<h3> nxmxm economy </h3>
+<h4> n consumers + m firms + m goods </h4>
+<button id='add-consumer'>add consumer</button>
+<button id='add-firm'>add firm</button>
+
+<ul>
+ <li><p>n consumers : each wants both goods + leisure; the labor they supply is identical</p>
+ <li><p>m firms : each firm produces only one good, which is different from every other good.</p>
+ <li><p>each firm has a firm-specific <span class='inline-code'><i>A<sub>i</sub></i></span></li></p>
+ <li><p>If rich, the agent supplies no labor. Look at <span class='inline-code'>consumer[0]</span>.</p>
+ <li><p>Is this solution unique?</p></li>
+ <!--<li><span class='math'>u=x+lny</span> might be relevant here?
+ <li> maybe use A*L^{alpha} production
+ <li> superwip - may be a waste of time not sure yet
+ -->
+<!--
+ <li> consider when all consumers alpha for one good changes (like a shock)
+ <li> if someone is very rich, <strong>their labor supply is negative!</strong> - impose b &gt; 0
+ <li> modify shares, not ownership
+ <li> <strong>make each firm multigood</strong>
+ <li> income inequality drives up prices </li>
+ <li> what if rich doesnt want to spedn on x0x1x2 etc? what if it wants other things?</li>
+ <li> inferiority of goods - that comes up pretty quickly
+ <li> and the limit of how many apples you can buy
+ <li> and wealth might have value too </li>
+ <li> different kinds of labor, with a different wage. </li>
+ <li> change the production functions? from Alnz to A*z_1^alpha*z_1^(1-alpha) CRS</li>
+ <li> LABOR: give each consumer effort_rating: education firm </li>
+ <li> what would the rich do with their money?
+ <li> we know that they wouldnt spend ALL their income
+ <li> how can they save? buy buying more shares?
+ <li> what is the cost of shares?
+ <li> can the rich invest? in things? or choose how to spend the profits?
+ <li><span class='math'>u=x+lny</span> might be relevant here.
+ <li>imagine y is essential stuff, food, rent, etc.</li>
+ <li> x is stuff you only buy AFTRE you have food and rent</li>
+-->
+</ul>
+</div>
+
+<div class='sub-section'>
+
+<table class='mytables'>
+  <tr><td style="font-weight: bold; text-align: center;" colspan="99">PROCEDURE</td></tr>
+  <tr><td>FIRMS</td><td>CONSUMERS</td></td>
+  <tr style='vertical-align: top;'>
+   <td>
+    <p><span class='math'>\pi^*_j = p_j \cdot A_j \cdot \ln z_j - w z_j </span></p>
+    <p><span class='math'>z^*_j = A_j \cdot \frac{p_j}{w}</span></p>
+    <p><span class='math'>y^*_j = A_j \cdot \ln ( A_j \cdot \frac{p_j}{w})</span></p>
+    <p><span class='math'>\pi^*_j = p_j \cdot A_j \cdot ( \ln (A_j \cdot \frac{p_j}{w}) - 1 )</span></p>
+   </td>
+   <td>
+    <p><span class='math'>u_i = \Sigma^2_{j=0} \alpha_{ij} \cdot \ln x_{ij} + \beta_i \cdot \ln b_{i}</span></p>
+    <p><span class='math'>M_{i} = w \cdot L_i + \Sigma^2_{j=0} \theta_{ij} \cdot \pi_{j}</span></p>
+    <p><span class='math'>b_i \le L_i</span></p>
+    <p><span class='math'>x_{ij} = \frac{\alpha_{ij}}{\Sigma \alpha + \beta} \cdot \frac{M_i}{p_0}</span></p>
+    <p><span class='math'>b_{i} = \frac{\beta_i}{\Sigma \alpha + \beta} \cdot \frac{M_i}{w}</span></p>
+    <p><span class='math'>n_{i} = L_i - b_i</span></p>
+   </td>
+  </tr>
+</table>
+
+</div>
+</div>
+
+<div class='sub-section'>
+ <div id='parameters'></div>
+</div>
+
+<div class='sub-section'>
+ <div id='pre-results'></div>
+</div>
+
+<div class='sub-section'>
+ <div id='results'></div>
+</div>
+
+<div class='section'>
+ <div id='market-equilibrium-conditions'></div>
+</div>
+
+</body>
+
+
+<script>
+
+// n_consumers
+// n_firms
+// n_goods
+
+// consumers
+// preferences = [[],[],...]  // for each consumer, for each good + leisure
+// shares = [[],[],...] // for each consumer, for each firm
+
+// firms
+// technology = [[],[],...] // for each firm, for each good
+
+
+ // solution :
+ // 1. find firms labor demands z[0] = [[],[],...]  // for each firm, for each good, for each kind of labor
+ // for z[0] which is basic labor : for each consumer, for each good
+ 
+ 
+ // 2. same for output : y = [[],[],...] // for each firm, for each good
+ // 3. get the profit vector : profit = []  // one for each firm
+ // 4. for each consumer, get the dividend vector : shares[i] dot [profits]
+ // 5. for each consumer, get the BUDGET = wage*endowment + dividends
+ // 6. use the budget, prices, preferences to get demand : x = [[],[],...] is the demand for each consumer, for each good
+ // 7. now we have supply and demand for all markets, and prices and wages, we can collide
+
+ // multigood firm \pi = p1 A1 ln z1 + p2 A2 ln z2 - w(z1 - z2)
+
+// EXOGENOUS EXOGENOUS
+let n_consumers = 3;
+let m_firms = 3;
+
+// EXOGENOUS
+let endowments = [];
+let preferences = [];
+let shares = [];
+let technologies = [];
+
+// INITIAL
+let wages = [1];
+let prices = [];
+
+// RESULTS
+let consumers;
+let firms;
+let market;
+
+// TO TRACK CALCULATIONS
+let n_steps = 0;
+
+for (let j = 0; j < m_firms; j++) {
+  prices.push(1);
+  
+  technologies.push([]);
+  for (let k = 0; k < m_firms; k++) {
+    if (j === k) {
+      technologies[j][k] = Math.random()+1;
+    } else {
+      technologies[j][k] = 0;
+    }
+  }
+}
+
+for (let i = 0; i < n_consumers; i++) {
+  endowments.push(24);
+  
+  preferences.push([]);
+  preferences[i].push(0.7+0.1*Math.random());
+  for (let j = 0; j < m_firms; j++) {
+    preferences[i].push(0.3+0.1*Math.random());
+  }
+  
+  shares.push([]);
+  for (let j = 0; j < m_firms; j++) {
+    if (i === 0) {
+      shares[i].push(Math.floor(70*Math.random()));
+    } else {
+      shares[i].push(Math.floor(10*Math.random()));
+    }
+  }
+}
+
+
+
+/*
+  let preferences = [
+   [0.7+0.1*Math.random(), 0.3+0.1*Math.random(), 0.3+0.1*Math.random(), 0.35+0.1*Math.random(), 0.35+0.1*Math.random()],
+   [0.7+0.1*Math.random(), 0.3+0.1*Math.random(), 0.3+0.1*Math.random(), 0.35+0.1*Math.random(), 0.35+0.1*Math.random()],
+   [0.7+0.1*Math.random(), 0.3+0.1*Math.random(), 0.3+0.1*Math.random(), 0.35+0.1*Math.random(), 0.35+0.1*Math.random()],
+   [0.7+0.1*Math.random(), 0.3+0.1*Math.random(), 0.3+0.1*Math.random(), 0.35+0.1*Math.random(), 0.35+0.1*Math.random()],
+   [0.7+0.1*Math.random(), 0.3+0.1*Math.random(), 0.3+0.1*Math.random(), 0.35+0.1*Math.random(), 0.35+0.1*Math.random()]
+  ];
+
+
+  let shares = [
+   [90, 50, 50, 30], // if this one is so rich, he doesnt want to work. and his labor supply is negative
+   [5, 3, 5, 2],
+   [2, 5, 4, 7],
+   [1, 9, 8, 19],
+   [5, 5, 5, 4]
+  ];
+
+  let technologies = [
+   [1.375, 0, 0, 0],
+   [0, 2.212, 0, 0],
+   [0, 0, 1.778, 0],
+   [0, 0, 0, 3.119]
+  ];
+*/
+
+window.onload = function() {
+
+  document.getElementById('add-consumer').addEventListener('click', function() {
+    endowments.push(24);
+    preferences.push([0.7]);
+    shares.push([]);
+    for (let i = 0; i < firms.length; i++) {
+      preferences[preferences.length-1].push(Math.random()*0.2+0.1);
+      shares[shares.length-1].push(Math.floor(Math.random()*5));
+    }
+    
+    ownerships = updateOwnershipsFromShares(shares);
+    
+    let n = endowments.length-1;
+    consumers = [];
+    for (let i = 0; i < preferences.length; i++) {
+      consumers[i] = new Consumer(i, endowments[i], preferences[i], ownerships[i]);
+    }
+    console.log(consumers);
+    document.getElementById('parameters').innerHTML = '';
+    
+    document.getElementById('parameters').appendChild(createPreferencesTable(preferences));
+    document.getElementById('parameters').appendChild(createOwnershipTable(shares));
+    document.getElementById('parameters').appendChild(createFirmTechnologyTable(technologies));
+    
+    //wages = [1];
+    //prices = [1, 1, 1, 1];
+    market = solveMarket(consumers, firms, wages, prices);
+  
+    console.log(market);
+    document.getElementById('pre-results').innerHTML = '';
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('pre-results').appendChild(createProfitTable(ownerships, market.profits));
+    document.getElementById('results').appendChild(returnMarketSummary(market));
+
+  });
+  
+  document.getElementById('add-firm').addEventListener('click', function() {
+    
+    for (let i = 0; i < preferences.length; i++) {
+     preferences[i].push(0.1);
+     shares[i].push(5);     
+    }
+    
+    let ownerships = updateOwnershipsFromShares(shares);
+    
+    consumers = [];
+    for (let i = 0; i < preferences.length; i++) {
+      consumers[i] = new Consumer(i, endowments[i], preferences[i], ownerships[i]);
+    };
+    //console.log(consumers);
+    document.getElementById('parameters').innerHTML = '';
+    
+    technologies.push([]);
+    for (let i = 0; i < technologies[0].length; i++) {
+      technologies[technologies.length-1][i] = 0;
+    }
+    for (let i = 0; i < technologies.length; i++) {
+      if (i === (technologies.length-1)) {
+       technologies[i].push(Math.random()*2+1);
+      } else {
+       technologies[i].push(0);
+      }
+    }
+    
+    
+    
+    // update firms
+    firms = [];
+    for (let i = 0; i < technologies.length; i++) {
+     firms[i] = new Firm(technologies[i]);
+    }
+    
+    document.getElementById('parameters').appendChild(createPreferencesTable(preferences));
+    document.getElementById('parameters').appendChild(createOwnershipTable(shares));
+    document.getElementById('parameters').appendChild(createFirmTechnologyTable(technologies));
+    
+    //let wages = [1];
+    prices.push(1);
+
+    market = solveMarket(consumers, firms, wages, prices);
+    
+    console.log(market);
+    document.getElementById('pre-results').innerHTML = '';
+    document.getElementById('results').innerHTML = '';
+    
+    document.getElementById('pre-results').appendChild(  createProfitTable(ownerships, market.profits));
+    document.getElementById('results').appendChild(returnMarketSummary(market));
+   
+    let market_equilibrium_conditions = document.getElementById('market-equilibrium-conditions');
+    market_equilibrium_conditions.innerHTML = '';
+    market_equilibrium_conditions.appendChild(returnMarketEquilibriumConditions(consumers, firms));
+    
+    
+  });
+  
+  
+  
+  
+ 
+
+  
+
+
+
+  let ownerships = updateOwnershipsFromShares(shares);
+
+  let consumers = [];
+  for (let i = 0; i < preferences.length; i++) {
+    consumers[i] = new Consumer(i, endowments[i], preferences[i], ownerships[i]);
+  }
+  
+
+  
+  let firms = [];
+  for (let i = 0; i < technologies.length; i++) {
+   firms[i] = new Firm(technologies[i]);
+  }
+  
+  document.getElementById('parameters').appendChild(createPreferencesTable(preferences));
+  document.getElementById('parameters').appendChild(createOwnershipTable(shares));
+  document.getElementById('parameters').appendChild(createFirmTechnologyTable(technologies));
+  
+  //let wages = [1];
+  //let prices = [1, 1, 1, 1];
+
+  market = solveMarket(consumers, firms, wages, prices);
+  
+  console.log(market);
+  
+  document.getElementById('pre-results').appendChild(  createProfitTable(ownerships, market.profits));
+  document.getElementById('results').appendChild(returnMarketSummary(market));
+ 
+  let market_equilibrium_conditions = document.getElementById('market-equilibrium-conditions');
+  market_equilibrium_conditions.innerHTML = '';
+  market_equilibrium_conditions.appendChild(returnMarketEquilibriumConditions(consumers, firms));
+ 
+}
+
+function updateOwnershipsFromShares(shares) {
+  let output = [];
+  for (let i = 0; i < shares.length; i++) {
+    output[i] = [];
+    for (let j = 0; j < shares[i].length; j++) {
+      output[i][j] = 0;
+    }
+  }
+  console.log(shares);
+  
+  for (let x = 0; x < shares[0].length; x++) {
+    
+    let subtotal = 0;
+    for (let y = 0; y < shares.length; y++) {
+      subtotal += shares[y][x];
+    }
+    for (let y = 0; y < shares.length; y++) {
+      output[y][x] = shares[y][x] / subtotal;
+    }
+  }
+  console.log(output);
+  return output;
+};
+
+function solveMarket(consumers, firms, wages, prices) {
+  
+  let market = testPrices(consumers, firms, wages, prices);
+  let dp = 1;
+  
+  while (dp > 0.00001) {
+  
+    for (let i = 0; i < market.prices.length; i++) {
+
+      // CHECK UP
+      let test_prices_u = market.prices.slice(0);
+      test_prices_u[i] = test_prices_u[i] + dp;
+      let test_market_u = testPrices(consumers, firms, wages, test_prices_u);
+      n_steps++;
+      
+      if (test_market_u.exx < market.exx) {
+        market = test_market_u;
+        break;
+      }
+      
+      // CHECK DOWN
+      let test_prices_d = market.prices.slice(0);
+      test_prices_d[i] = test_prices_d[i] - dp;
+      let test_market_d = testPrices(consumers, firms, wages, test_prices_d);
+      n_steps++;
+      
+      if (test_market_d.exx < market.exx) {
+        market = test_market_d;
+        break;
+      }
+    
+    if (i === market.prices.length-1) {
+     // you'll only make it here if
+     dp = dp/10;
+    }
+    
+      
+    }
+    
+
+  }
+  
+  console.log(n_steps);
+  return market;
+}
+
+function createFirmTechnologyTable(A) {
+  let table = document.createElement('table');
+  table.classList.add('mytables');
+  table.classList.add('results');
+  
+  table.innerHTML += '<tr><td style="font-weight: bold; text-align: center;" colspan="99">FIRM TECHNOLOGY</td></tr>';
+  
+  //for (let i = 0; i < 1; i++) {
+  (function() {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    tr.innerHTML += '<td>x</td>';
+    for (let j = 0; j < A[0].length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = 'GOODS['+ j +']';
+    }
+  })();
+
+    
+
+     
+  //} 
+  
+  
+  for (let i = 0; i < A.length; i++) {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    
+    tr.innerHTML += '<td>firms[' + i + ']</td>';
+    
+    for (let j = 0; j < A[i].length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (A[i][j]).toFixed(4);
+    }
+     
+  }
+
+  return table;
+}
+
+function createProfitTable(ownership, profits) {
+  let table = document.createElement('table');
+  table.classList.add('mytables');
+  table.classList.add('results');
+
+  table.innerHTML += '<tr><td style="font-weight: bold; text-align: center;" colspan="99">PROFIT ALLOCATION</td></tr>';
+  
+  let header_tr = document.createElement('tr');
+  table.appendChild(header_tr);
+  for (let j = 0; j < profits.length; j++) {
+    if (j === 0) {
+      let td = document.createElement('td');
+      header_tr.appendChild(td);
+      td.innerHTML = 'x';  
+    }
+    let td = document.createElement('td');
+    header_tr.appendChild(td);
+    td.innerHTML = 'FIRMS[' + j + ']';
+    //td.innerHTML = (profits[j]).toFixed(4);
+    if (j === (profits.length-1)) {
+      let td = document.createElement('td');
+      header_tr.appendChild(td);
+      td.innerHTML = 'CONSUMER <BR> TOTALS';  
+    }
+  }
+  
+  
+  
+  for (let i = 0; i < ownership.length; i++) {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    
+    tr.innerHTML += '<td>consumers[' + i + ']</td>';
+    
+    let consumer_total = 0;
+    for (let j = 0; j < ownership[i].length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (ownership[i][j]*profits[j]).toFixed(4);
+      consumer_total += ownership[i][j]*profits[j];
+      
+      
+    }
+    
+    let consumer_total_td = document.createElement('td');
+    tr.appendChild(consumer_total_td);
+    consumer_total_td.innerHTML = (consumer_total).toFixed(4);
+    
+  }
+  
+  let firm_totals = document.createElement('tr');
+  table.appendChild(firm_totals);
+  firm_totals.innerHTML += '<td>FIRM TOTALS</td>';
+  
+  let total_firm_profits = 0;
+  for (let j = 0; j < profits.length; j++) {
+    let td = document.createElement('td');
+    firm_totals.appendChild(td);
+    total_firm_profits += profits[j];
+    td.innerHTML = (profits[j]).toFixed(4);
+  }
+  
+  let total_firm_profits_td = document.createElement('td');
+  firm_totals.appendChild(total_firm_profits_td);
+  total_firm_profits_td.innerHTML = (total_firm_profits).toFixed(4);
+  
+  return table;
+}
+
+function createPreferencesTable(preferences) {
+  let table = document.createElement('table');
+  table.classList.add('mytables');
+  table.classList.add('results');
+  
+  table.innerHTML += '<tr><td style="font-weight: bold; text-align: center;" colspan="99">PREFERENCES</td></tr>';
+  
+  (function() {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    tr.innerHTML += '<td>x</td>';
+    
+    for (let j = 0; j < preferences[0].length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+       if (j === 0) {
+         td.innerHTML = 'LEISURE';
+      } else {
+       td.innerHTML = 'GOODS['+ (j-1) +']';
+      }
+    }
+  })();
+  
+  for (let i = 0; i < preferences.length; i++) {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    
+    tr.innerHTML += '<td>consumers[' + i + ']</td>';
+    
+    for (let j = 0; j < preferences[i].length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (preferences[i][j]).toFixed(4);
+    }
+     
+  }
+
+  return table;
+}
+
+function createOwnershipTable(shares) {
+  let table = document.createElement('table');
+  table.classList.add('mytables');
+  table.classList.add('results');
+  
+  table.innerHTML += '<tr><td style="font-weight: bold; text-align: center;" colspan="99">SHARES</td></tr>';
+  
+  (function() {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    tr.innerHTML += '<td>x</td>';
+    for (let j = 0; j < shares[0].length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = 'FIRMS['+ j +']';
+    }
+  })();
+  
+  for (let i = 0; i < shares.length; i++) {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    
+    tr.innerHTML += '<td>consumers[' + i + ']</td>';
+    
+    for (let j = 0; j < shares[i].length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (shares[i][j]).toFixed(4);
+    }
+     
+  }
+
+  return table;
+}
+
+function returnMarketSummary(market) {
+  let table = document.createElement('table');
+  table.classList.add('mytables');
+  table.classList.add('results');
+  
+  table.innerHTML += "<tr style='font-weight: bold;'><td colspan='99' style='text-align: center;'>MARKET SUMMARY</td></tr>";
+
+  let price_row = document.createElement('tr');
+  table.appendChild(price_row);
+  price_row.classList.add('solved-prices');
+  price_row.innerHTML = '<td>PRICES</td>';
+  
+  for (let i = 0; i < market.wages.length; i++) {
+    let td = document.createElement('td');
+    price_row.appendChild(td);
+    td.innerHTML = (market.wages[i]).toFixed(4);
+  }
+  for (let i = 0; i < market.prices.length; i++) {
+    let td = document.createElement('td');
+    price_row.appendChild(td);
+    td.innerHTML = (market.prices[i]).toFixed(4);
+  }
+
+
+  // for each consumer, list their values
+  
+  let arr = [];
+  for (let i = 0; i < (market.markets.labor.length + market.markets.goods.length); i++) {
+    arr[i] = 0;
+  };
+
+  for (let i = 0; i < market.consumers.length; i++) {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    
+    tr.innerHTML += '<td>consumers[' + i + ']</td>';
+    
+    for (let j = 0; j < market.consumers[i].results.n.length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (market.consumers[i].results.n[j]).toFixed(4);
+      arr[j] += market.consumers[i].results.n[j];
+    }
+    for (let j = 0; j < market.consumers[i].results.x.length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (-market.consumers[i].results.x[j]).toFixed(4);
+      arr[market.markets.labor.length + j] -= market.consumers[i].results.x[j];
+    }
+    
+    if (i === market.consumers.length-1) {
+      let tr = document.createElement('tr');
+      tr.classList.add('consumers-totals');
+      table.appendChild(tr);
+      tr.innerHTML = '<td>CONSUMERS</td>';
+      for (let j = 0; j < arr.length; j++) {
+        let td = document.createElement('td');
+        tr.appendChild(td);
+        td.innerHTML = (arr[j]).toFixed(4);
+      }
+      
+    }
+    
+  }
+  
+  // FIRMS
+  
+  let arr2 = [];
+  for (let i = 0; i < (market.markets.labor.length + market.markets.goods.length); i++) {
+    arr2[i] = 0;
+  };
+  //console.log(arr);
+  for (let i = 0; i < market.firms.length; i++) {
+    let tr = document.createElement('tr');
+    table.appendChild(tr);
+    
+    tr.innerHTML += '<td>firms[' + i + ']</td>';
+    
+    for (let j = 0; j < market.firms[i].results.z.length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (-market.firms[i].results.z[j]).toFixed(4);
+      arr2[j] += -market.firms[i].results.z[j];
+    }
+    for (let j = 0; j < market.firms[i].results.y.length; j++) {
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      td.innerHTML = (market.firms[i].results.y[j]).toFixed(4);
+      arr2[market.markets.labor.length + j] += market.firms[i].results.y[j];
+    }
+    
+    if (i === market.firms.length-1) {
+      let tr = document.createElement('tr');
+      tr.classList.add('firms-totals');
+      table.appendChild(tr);
+      tr.innerHTML = '<td>FIRMS</td>';
+      for (let j = 0; j < arr2.length; j++) {
+        let td = document.createElement('td');
+        tr.appendChild(td);
+        td.innerHTML = (arr2[j]).toFixed(4);
+      }
+      
+    }
+    
+  }
+
+  let tr_exx = document.createElement('tr');
+  table.appendChild(tr_exx);
+  tr_exx.innerHTML = '<td>EXCESS</td>';
+  for (let i = 0; i < arr.length; i++) {
+   let td = document.createElement('td');
+   tr_exx.appendChild(td);
+   //tr_exx.style.backgroundColor = '#c6d9ec';
+   td.innerHTML = (arr[i] + arr2[i]).toFixed(4);
+  }
+
+  return table;
+}
+
+function Consumer(id, endowment, preferences, ownerships) {
+  this.id = id;
+  this.L = endowment;
+  this.beta = preferences.slice(0,1);
+  this.alpha = preferences.slice(1);
+  this.theta = ownerships.slice(0);
+
+  this.A = (function() {
+    let a = 0;
+    for (let i = 0; i < preferences.length; i++) {
+      a += preferences[i];
+    }
+    return a;
+  })();
+  
+  this.B = (function() {
+    let a = 0;
+    for (let i = 1; i < preferences.length; i++) {
+      a += preferences[i];
+    }
+    return a;
+  })();
+  
+  this.b = [];
+  this.n = [];
+  this.x = [];
+  this.profit = [];
+
+}
+Consumer.prototype.collide = function(wages, prices, profits) {
+ 
+ let dividends = 0;
+ for (let i = 0; i < this.theta.length; i++) {
+   dividends += this.theta[i]*profits[i];
+ }
+ let budget = wages[0]*this.L + dividends;
+
+ let b = [(this.beta/this.A)*(budget/wages[0])];
+ let n = [this.L - b[0]];  
+
+ let x = [];
+ for (let i = 0; i < this.alpha.length; i++) {
+   x[i] = (this.alpha[i]/this.A)*(budget/prices[i]);
+ }
+ 
+ if (b[0] > this.L) {
+   budget = dividends;
+   b[0] = this.L;
+   n[0] = 0;
+   for (let i = 0; i < this.alpha.length; i++) {
+     x[i] = (this.alpha[i]/this.B)*(budget/prices[i]);
+   }
+ }
+ 
+// it does need to be corrected SO its not that easy. if you set budget = sum of profit, it b might be less than L, since the equilibrium calculation is changed
+ 
+
+
+ return {
+  'budget':budget,
+  'b':b,
+  'n':n,
+  'x':x
+ }
+}
+
+function Firm(A) {
+  this.A = A; // technology
+}
+Firm.prototype.collide = function(wages, prices) {
+
+  let obj = []; // array of objects; each object contains y-value (output), and z-array (the required factors of input to make y)
+  
+  let z = [0];
+  let y = [];
+  let revenue = 0;
+  
+  for (let i = 0; i < this.A.length; i++) {
+   let z_ = this.A[i]*(prices[i]/wages[0])
+   z[0] += z_;
+   y[i] = (this.A[i]*Math.log(z_, Math.E) || 0);
+   
+   obj.push({
+     'y': (this.A[i]*Math.log(z_, Math.E) || 0),
+     'z': [z_]
+   });
+   revenue += prices[i]*y[i];
+  }
+
+  let profit = revenue - wages[0]*z[0];
+  
+  obj.revenue = revenue;
+  obj.profit = profit;
+
+  return {
+   'z': z,
+   'y': y,
+   'revenue': revenue,
+   'profit': profit,
+   'output': obj
+  }
+}
+
+function testPrices(consumers, firms, wages, prices) {
+  
+ let temp = {};
+ temp.wages = wages;
+ temp.prices = prices;
+ temp.firms = [];
+ temp.profits = [];
+ temp.consumers = [];
+ 
+ for (let i = 0; i < firms.length; i++) {
+   temp.firms.push({});
+   temp.firms[i].results = firms[i].collide(wages, prices);
+   temp.profits[i] = temp.firms[i].results.profit;
+ }
+ 
+ for (let i = 0; i < consumers.length; i++) {
+   temp.consumers.push({});
+   temp.consumers[i].results = consumers[i].collide(wages, prices, temp.profits);
+ }
+ 
+ // MARKETS
+ temp.markets = {};
+ temp.markets.labor = [];
+ temp.markets.goods = [];
+ temp.exx = 0;
+
+
+ // TEST EACH PRICE IN THE RESPECTIVE GOODS MARKET
+
+ for (let i = 0; i < wages.length; i++) {
+  temp.markets.labor[i] = new Market('labor', i, temp.consumers, temp.firms);
+  temp.exx += temp.markets.labor[i].total.excess**2;
+ }
+ 
+ for (let i = 0; i < prices.length; i++) {
+  temp.markets.goods[i] = new Market('goods', i, temp.consumers, temp.firms);
+  temp.exx += temp.markets.goods[i].total.excess**2;
+ }
+
+ return temp;
+}
+
+
+function Market(market_type, market_id, consumers, firms) {
+
+ let obj = {
+   'market_id':market_id,
+   'supply':[],
+   'demand':[],
+   'total':{
+     'supply':0,
+     'demand':0,
+     'excess':0
+   } 
+  }
+ 
+ if (market_type === 'goods') {
+  // to get supply, we have to look at every firm
+  for (let i = 0; i < firms.length; i++) {
+    obj.supply[i] = firms[i].results.y[market_id];
+    obj.total.supply += firms[i].results.y[market_id];
+  }
+  // to get demand, we have to look at every consumer
+  for (let i = 0; i < consumers.length; i++) {
+    obj.demand[i] = consumers[i].results.x[market_id];
+    obj.total.demand += consumers[i].results.x[market_id];
+  }
+ }
+ 
+ if (market_type === 'labor') {
+  // to get supply, we have to look at every consumer
+  for (let i = 0; i < consumers.length; i++) {
+    obj.supply[i] = consumers[i].results.n[market_id];
+    obj.total.supply += consumers[i].results.n[market_id];
+  }
+  // to get demand, we have to look at every firm
+  for (let i = 0; i < firms.length; i++) {
+    obj.demand[i] = firms[i].results.z[market_id];
+    obj.total.demand += firms[i].results.z[market_id];
+  }
+ }
+ 
+ obj.total.excess = obj.total.supply - obj.total.demand;
+ return obj;
+}
+
+function returnMarketEquilibriumConditions(consumers, firms) {
+  
+  let div = document.createElement('div');
+  //div.innerHTML = Math.random();
+  
+  // LABOR
+  let output = document.createElement('p');
+  div.appendChild(output);
+  output.classList.add('math');
+  let output_str = '';
+  for (let i = 0; i < consumers.length; i++) {
+    output_str += 'L_' + i + '-\\dfrac{\\beta_i}{\\sum_{i=0}^{k} \\alpha + \\beta} \\cdot \\dfrac{M_i}{w} +';
+    
+  }
+  
+  //output.innerHTML = 
+  katex.render(output_str, output);
+  
+  
+  let p2 = document.createElement('p');
+  p2.classList.add('math');
+  let s2 = '';
+  s2 = '\\displaystyle\\sum_{i=0}^n \\Bigg ( {L_i - \\dfrac{\\beta_i}{\\sum_{j=0}^m \\alpha_j + \\beta_i} \\cdot \\dfrac{wL_i + \\sum_{j=0}^{m} \\theta_{ij} \\cdot \\pi_j}{w}} \\Bigg ) = \\displaystyle\\sum_{j=0}^m A_j \\cdot \\dfrac{p_j}{w}';
+  
+  
+  katex.render(s2, p2);
+  
+  return p2;
+}
+
+
+</script>
+</html>

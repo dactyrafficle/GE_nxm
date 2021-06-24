@@ -1,0 +1,57 @@
+html, body {
+  font-family: calibri;
+}
+pre {
+  white-space: pre-wrap;
+}
+.blue {
+  color: rgb(0, 0, 150);
+  border: 1px solid #ddd;
+  padding: 1vh;
+  margin: 1vh;
+}
+.green {
+  color: green;
+}
+.inline-code {
+  font-family: monospace;
+  background-color: #eee;
+  padding: 3px;
+}
+.pink {
+  color: #faf;
+}
+#ax pre {
+ margin: 1vh;
+ padding: 1vh;
+}
+#ax div {
+ margin: 1vh;
+ padding: 1vh;
+}
+
+.outline .katex {
+ border: 0.0625em solid #999;
+ padding: 1vh;
+ margin: 1vh;
+ display: inline-block;
+}
+
+.section {
+ border: 1px solid #ddd;
+ margin: 1vh;
+ padding: 1vh;
+}
+.sub-section {
+ display: inline-block;
+ vertical-align: top;
+}
+
+.mytables {
+ border-collapse: collapse;
+ margin: 1vh;
+}
+.mytables td {
+ border: 1px solid #ddd;
+ padding: 0.5vh;
+}
