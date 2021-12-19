@@ -18,4 +18,4 @@ The algorithm starts at some price vector, and walks in the direction of improve
 
 The results are easy to verify. But the methodology, I'm not too sure about. It works here, but I don't know what conditions need to be met for it work. Because in other, more complex markets, this method does not work.
 
-https://dactyrafficle.github.io/GE_nxmxm/
+https://dactyrafficle.github.io/GE_nxm/
