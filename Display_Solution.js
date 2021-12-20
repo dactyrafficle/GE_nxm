@@ -1,349 +1,73 @@
 
-Economy.prototype.Display_Solution = function() {
 
-  this.output_tables = {
-    'market_summary':null
-  }
+Economy.prototype.UPDATE_MARKET_SUMMARY_TABLE = function() {
 
+  let subtitle_row = this.output_tables.market_summary.subtitle_row;
+  let tbody = this.output_tables.market_summary.tbody;
+  subtitle_row.innerHTML = '';
+  tbody.innerHTML = '';
 
-  let table = document.createElement('table');
-  table.classList.add('mytables');
+  let arr = [];
   
-
-  
-  // TITLE
-  (function(){
-    let tr = document.createElement('tr');
-    table.appendChild(tr);
-    
-    let th = document.createElement('th');
-    tr.appendChild(th);
-    th.colSpan = 99;
-    th.innerHTML = 'MARKET SUMMARY';
-  })();
-  
-  // SUBTITLES
-  let subtitle_row = document.createElement('tr');
-  table.appendChild(subtitle_row);
-    
-  (function() {
-    let th = document.createElement('th');
-    subtitle_row.appendChild(th);
-    th.innerHTML = 'x';
-  })();
-    
-  let consumer_totals = [];
-  let firm_totals = [];
-  for (let i = 0; i < this.SOLUTION.markets.labor.length; i++) {
+  let n_cols = this.n_leisures + this.n_goods + 1;
+  let consumer_totals = [], firm_totals = [], totals = [];
+  for (let i = 0; i < n_cols; i++) {
     consumer_totals.push(0);
     firm_totals.push(0);
-    
-    (function() {
-      let td = document.createElement('th');
-      subtitle_row.appendChild(td);
-      td.innerHTML = 'LABOR[0]';
-    })();
-    
+    totals.push(0);
   }
   
-  for (let i = 0; i < this.SOLUTION.markets.goods.length; i++) {
-    consumer_totals.push(0);
-    firm_totals.push(0);
-    
-    (function() {
-      let td = document.createElement('th');
-      subtitle_row.appendChild(td);
-      td.innerHTML = 'GOODS[' + i + ']';
-    })();
+  // THE COLUMN HEADERS
+  arr[0] = ['x','L[0]'];
+  for (let i = 0; i < this.n_goods; i++) {
+    arr[0].push('G[' + i + ']');
   }
+  
+  // CONSUMER DATA
+  consumer_totals[0] = 'C';
+  for (let i = 0; i < this.n_consumers; i++) {
+    let row = ['C[' + i + ']'];
+    row.push(this.SOLUTION.consumers[i].labor_supply[0]);
+    consumer_totals[1] += this.SOLUTION.consumers[i].labor_supply[0];
+    for (let j = 0; j < this.n_goods; j++) {
+      row.push(this.SOLUTION.consumers[i].goods_demand[j]);
+      consumer_totals[j+2] += this.SOLUTION.consumers[i].goods_demand[j];
+    }
+    arr.push(row)
+  }
+  arr.push(consumer_totals);
 
-  for (let i = 0; i < this.SOLUTION.consumers.length; i++) {
-    
+  // FIRM DATA
+  firm_totals[0] = 'F';
+  for (let i = 0; i < this.n_firms; i++) {
+    let row = ['F[' + i + ']'];
+    row.push(this.SOLUTION.firms[i].labor_demand[0]);
+    firm_totals[1] += this.SOLUTION.firms[i].labor_demand[0];
+    for (let j = 0; j < this.n_goods; j++) {
+      row.push(this.SOLUTION.firms[i].output_supply[j]);
+      firm_totals[j+2] += this.SOLUTION.firms[i].output_supply[j];
+    }
+    arr.push(row)
+  }
+  arr.push(firm_totals);
+  
+  // TOTALS
+  let row = ['NET'];
+  for (let i = 1; i < n_cols; i++) {
+    row[i] = consumer_totals[i] - firm_totals[i];
+  }
+  arr.push(row);
+  
+  // POPULATE TBODY
+  for (let y = 0; y < arr.length; y++) {
     let tr = document.createElement('tr');
-    table.appendChild(tr);
-
-    (function() {
-      let th = document.createElement('th');
-      tr.appendChild(th);
-      th.innerHTML = 'CONSUMERS[' + i + ']';
-      th.classList.add('row_header');
-    })();
-
-    let market_no = 0;
-
-    // LABOR SUPPLY
-    (function() {
+    tbody.appendChild(tr);
+    
+    for (let x = 0; x < arr[y].length; x++) {
       let td = document.createElement('td');
       tr.appendChild(td);
-      td.innerHTML = this.SOLUTION.consumers[i].labor_supply[0].toFixed(4);
-      consumer_totals[market_no] += this.SOLUTION.consumers[i].labor_supply[0];
-      market_no++;
-    }.bind(this))();
-    
-    // GOODS DEMAND
-    for (let j = 0; j < this.SOLUTION.consumers[i].goods_demand.length; j++) {
-      (function() {
-        let td = document.createElement('td');
-        tr.appendChild(td);
-        td.innerHTML = this.SOLUTION.consumers[i].goods_demand[j].toFixed(4);
-        consumer_totals[market_no] += this.SOLUTION.consumers[i].goods_demand[j];
-        market_no++;
-      }.bind(this))();   
+      td.innerHTML = (parseFloat(arr[y][x])+0 === parseFloat(arr[y][x])) ? (arr[y][x].toFixed(4)) : (arr[y][x]);
     }
-     
-  } // CLOSE CONSUMER CONTENT
-  
-  let consumer_totals_row = document.createElement('tr');
-  table.appendChild(consumer_totals_row);
-  
-  (function() {
-    let th = document.createElement('th');
-    consumer_totals_row.appendChild(th);
-    th.innerHTML = 'CONSUMERS';
-    th.classList.add('row_header');
-  })();
-  
-  for (let i = 0; i < consumer_totals.length; i++) {
-    (function() {
-      let td = document.createElement('td');
-      consumer_totals_row.appendChild(td);
-      td.innerHTML = consumer_totals[i].toFixed(4);
-    }.bind(this))();
   }
   
-  // FOR EACH FIRM
-  for (let i = 0; i < this.SOLUTION.firms.length; i++) {
-    
-    let tr = document.createElement('tr');
-    table.appendChild(tr);
-
-    (function() {
-      let th = document.createElement('th');
-      tr.appendChild(th);
-      th.innerHTML = 'FIRMS[' + i + ']';
-      th.classList.add('row_header');
-    })();
-
-    let market_no = 0;
-    
-    // LABOR DEMAND
-    (function() {
-      let td = document.createElement('td');
-      tr.appendChild(td);
-      td.innerHTML = this.SOLUTION.firms[i].labor_demand[0].toFixed(4);
-      firm_totals[market_no] += this.SOLUTION.firms[i].labor_demand[0];
-      market_no++;
-    }.bind(this))();
-    
-    // GOODS SUPPLY
-    for (let j = 0; j < this.SOLUTION.firms[i].output_supply.length; j++) {
-      (function() {
-        let td = document.createElement('td');
-        tr.appendChild(td);
-        td.innerHTML = this.SOLUTION.firms[i].output_supply[j].toFixed(4);
-        firm_totals[market_no] += this.SOLUTION.firms[i].output_supply[j];
-        market_no++;
-      }.bind(this))();   
-    }
-    
-    
-  } // close firm content
-  
-  let firm_totals_row = document.createElement('tr');
-  table.appendChild(firm_totals_row);
-  
-  (function() {
-    let th = document.createElement('th');
-    firm_totals_row.appendChild(th);
-    th.innerHTML = 'FIRMS';
-    th.classList.add('row_header');
-  })();
-  
-  for (let i = 0; i < firm_totals.length; i++) {
-    (function() {
-      let td = document.createElement('td');
-      firm_totals_row.appendChild(td);
-      td.innerHTML = firm_totals[i].toFixed(4);
-    }.bind(this))();
-  }
-  
-  // return table;
-  this.output_tables.market_summary = table;
-  // console.log(this.output_tables.market_summary);
-  return this.output_tables.market_summary;
-}
-
-
-// UPDATE 
-
-Economy.prototype.Update_Display_Solution = function() {
-
-
-  let table = this.output_tables.market_summary;
-  table.innerHTML = '';
-  table.classList.add('mytables');
-  
-
-  
-  // TITLE
-  (function(){
-    let tr = document.createElement('tr');
-    table.appendChild(tr);
-    
-    let th = document.createElement('th');
-    tr.appendChild(th);
-    th.colSpan = 99;
-    th.innerHTML = 'MARKET SUMMARY';
-  })();
-  
-  // SUBTITLES
-  let subtitle_row = document.createElement('tr');
-  table.appendChild(subtitle_row);
-    
-  (function() {
-    let th = document.createElement('th');
-    subtitle_row.appendChild(th);
-    th.innerHTML = 'x';
-  })();
-    
-  let consumer_totals = [];
-  let firm_totals = [];
-  for (let i = 0; i < this.SOLUTION.markets.labor.length; i++) {
-    consumer_totals.push(0);
-    firm_totals.push(0);
-    
-    (function() {
-      let td = document.createElement('th');
-      subtitle_row.appendChild(td);
-      td.innerHTML = 'LABOR[0]';
-    })();
-    
-  }
-  
-  for (let i = 0; i < this.SOLUTION.markets.goods.length; i++) {
-    consumer_totals.push(0);
-    firm_totals.push(0);
-    
-    (function() {
-      let td = document.createElement('th');
-      subtitle_row.appendChild(td);
-      td.innerHTML = 'GOODS[' + i + ']';
-    })();
-  }
-
-  for (let i = 0; i < this.SOLUTION.consumers.length; i++) {
-    
-    let tr = document.createElement('tr');
-    table.appendChild(tr);
-
-    (function() {
-      let th = document.createElement('th');
-      tr.appendChild(th);
-      th.innerHTML = 'CONSUMERS[' + i + ']';
-      th.classList.add('row_header');
-    })();
-
-    let market_no = 0;
-
-    // LABOR SUPPLY
-    (function() {
-      let td = document.createElement('td');
-      tr.appendChild(td);
-      td.innerHTML = this.SOLUTION.consumers[i].labor_supply[0].toFixed(4);
-      consumer_totals[market_no] += this.SOLUTION.consumers[i].labor_supply[0];
-      market_no++;
-    }.bind(this))();
-    
-    // GOODS DEMAND
-    for (let j = 0; j < this.SOLUTION.consumers[i].goods_demand.length; j++) {
-      (function() {
-        let td = document.createElement('td');
-        tr.appendChild(td);
-        td.innerHTML = this.SOLUTION.consumers[i].goods_demand[j].toFixed(4);
-        consumer_totals[market_no] += this.SOLUTION.consumers[i].goods_demand[j];
-        market_no++;
-      }.bind(this))();   
-    }
-     
-  } // CLOSE CONSUMER CONTENT
-  
-  let consumer_totals_row = document.createElement('tr');
-  table.appendChild(consumer_totals_row);
-  
-  (function() {
-    let th = document.createElement('th');
-    consumer_totals_row.appendChild(th);
-    th.innerHTML = 'CONSUMERS';
-    th.classList.add('row_header');
-  })();
-  
-  for (let i = 0; i < consumer_totals.length; i++) {
-    (function() {
-      let td = document.createElement('td');
-      consumer_totals_row.appendChild(td);
-      td.innerHTML = consumer_totals[i].toFixed(4);
-    }.bind(this))();
-  }
-  
-  // FOR EACH FIRM
-  for (let i = 0; i < this.SOLUTION.firms.length; i++) {
-    
-    let tr = document.createElement('tr');
-    table.appendChild(tr);
-
-    (function() {
-      let th = document.createElement('th');
-      tr.appendChild(th);
-      th.innerHTML = 'FIRMS[' + i + ']';
-      th.classList.add('row_header');
-    })();
-
-    let market_no = 0;
-    
-    // LABOR DEMAND
-    (function() {
-      let td = document.createElement('td');
-      tr.appendChild(td);
-      td.innerHTML = this.SOLUTION.firms[i].labor_demand[0].toFixed(4);
-      firm_totals[market_no] += this.SOLUTION.firms[i].labor_demand[0];
-      market_no++;
-    }.bind(this))();
-    
-    // GOODS SUPPLY
-    for (let j = 0; j < this.SOLUTION.firms[i].output_supply.length; j++) {
-      (function() {
-        let td = document.createElement('td');
-        tr.appendChild(td);
-        td.innerHTML = this.SOLUTION.firms[i].output_supply[j].toFixed(4);
-        firm_totals[market_no] += this.SOLUTION.firms[i].output_supply[j];
-        market_no++;
-      }.bind(this))();   
-    }
-    
-    
-  } // close firm content
-  
-  let firm_totals_row = document.createElement('tr');
-  table.appendChild(firm_totals_row);
-  
-  (function() {
-    let th = document.createElement('th');
-    firm_totals_row.appendChild(th);
-    th.innerHTML = 'FIRMS';
-    th.classList.add('row_header');
-  })();
-  
-  for (let i = 0; i < firm_totals.length; i++) {
-    (function() {
-      let td = document.createElement('td');
-      firm_totals_row.appendChild(td);
-      td.innerHTML = firm_totals[i].toFixed(4);
-    }.bind(this))();
-  }
-  
-  // return table;
-  // console.log(this.output_tables.market_summary);
-  this.output_tables.market_summary = table;
-  
-  // return this.output_tables.market_summary
 }

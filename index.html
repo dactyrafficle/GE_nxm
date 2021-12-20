@@ -1,17 +1,31 @@
+<!DOCTYPE html>
 <html>
 
+<!--
+
+little description
+add the equations
+compartmentalize a bit more
+add a little chart
+
+-->
+
 <head>
- <meta charset="utf-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <link rel='stylesheet' href='main.css'>
- <link rel="icon" href="index.png">
- <title> GE_nxm! </title>
- <style></style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> GE_nxm! </title>
+  <link rel='stylesheet' href='ge_nxm.css'>
+  <link rel="icon" href="index.png">
+  
+  <!-- the wonderful katex ! -->
+  <link rel="stylesheet" href="katex.min.css">
+  <script src="katex.min.js"></script>
+
 </head>
 
 <body>
 
- <div>
+ <div class='box'>
   <table class='mytables'>
    <tr>
     <td>add consumer</td>
@@ -21,6 +35,28 @@
     <td>add firm</td>
     <td><button id='add_firm_btn'>ADD firm</button></td>
    </tr>
+  </table>
+ </div>
+ <div class='box'>
+  <table class='mytables'>
+    <tr><td style="font-weight: bold; text-align: center;" colspan="99">PROCEDURE</td></tr>
+    <tr><td>FIRMS</td><td>CONSUMERS</td></td>
+    <tr style='vertical-align: top;'>
+     <td>
+      <p><span class='math'>\pi^*_j = p_j \cdot A_j \cdot \ln z_j - w z_j </span></p>
+      <p><span class='math'>z^*_j = A_j \cdot \frac{p_j}{w}</span></p>
+      <p><span class='math'>y^*_j = A_j \cdot \ln ( A_j \cdot \frac{p_j}{w})</span></p>
+      <p><span class='math'>\pi^*_j = p_j \cdot A_j \cdot ( \ln (A_j \cdot \frac{p_j}{w}) - 1 )</span></p>
+     </td>
+     <td>
+      <p><span class='math'>u_i = \Sigma^2_{j=0} \alpha_{ij} \cdot \ln x_{ij} + \beta_i \cdot \ln b_{i}</span></p>
+      <p><span class='math'>M_{i} = w \cdot L_i + \Sigma^2_{j=0} \theta_{ij} \cdot \pi_{j}</span></p>
+      <p><span class='math'>b_i \le L_i</span></p>
+      <p><span class='math'>x_{ij} = \frac{\alpha_{ij}}{\Sigma \alpha + \beta} \cdot \frac{M_i}{p_0}</span></p>
+      <p><span class='math'>b_{i} = \frac{\beta_i}{\Sigma \alpha + \beta} \cdot \frac{M_i}{w}</span></p>
+      <p><span class='math'>n_{i} = L_i - b_i</span></p>
+     </td>
+    </tr>
   </table>
  </div>
  
@@ -35,15 +71,12 @@
 <script src='setup_main.js'></script>
 
 <script>
-
-// input matrices are hardcoded
-// 01 : use the matrices to create input tables, each with an onchange event listener
-// 02 : use the matrices to update the solution
-// 03 : the solution updates the output display
-// 04 : the onchange event listener uses the matrices to 02 and 03
-// 05 : 
-
-
+window.addEventListener('load', function() {
+let math = document.getElementsByClassName('math');
+for (let i = 0; i < math.length; i++) {
+ katex.render(math[i].textContent, math[i]);
+}
+});
 </script>
 
 </html>
