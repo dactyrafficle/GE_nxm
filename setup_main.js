@@ -22,7 +22,9 @@ window.onload = function() {
 
   output_container = document.getElementById('output_container');
   output_container.appendChild(e.output_tables.market_summary.table);
-
+  output_container.appendChild(e.output_tables.output_allocation.table);
+  // output_container.appendChild(e.output_tables.market_equilibrium.table);
+  
   e.UPDATE_INPUT_TABLES();
   e.Find_Price_Vector_Solution();
   e.UPDATE_OUTPUT_TABLES();

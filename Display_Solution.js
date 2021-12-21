@@ -1,5 +1,36 @@
 
 
+Economy.prototype.UPDATE_MARKET_EQUILIBRIUM_TABLE = function() {
+
+  let subtitle_row = this.output_tables.market_equilibrium.subtitle_row;
+  let tbody = this.output_tables.market_equilibrium.tbody;
+  subtitle_row.innerHTML = '';
+  tbody.innerHTML = '';
+  
+  let str = '';
+  for (let i = 0; i < this.n_firms-1; i++) {
+    str += 'z_{' + i + '} + ' 
+  }
+  str += 'z_{' + (this.n_firms-1) + '} = '
+
+  let s = document.createElement('span');
+  s.classList.add('math');
+  
+let str2 = '\\displaystyle\\sum_{i=0}^n \\Bigg ( {L_i - \\dfrac{\\beta_i}{\\sum_{j=0}^m \\alpha_j + \\beta_i} \\cdot \\dfrac{wL_i + \\sum_{j=0}^{m} \\theta_{ij} \\cdot \\pi_j}{w}} \\Bigg ) = \\displaystyle\\sum_{j=0}^m A_j \\cdot \\dfrac{p_j}{w}';
+  
+  s.innerHTML = str2;
+  
+  let tr = document.createElement('tr');
+  tbody.appendChild(tr);
+  
+  let td = document.createElement('td');
+  tr.appendChild(td);
+  
+  td.appendChild(s);
+  
+
+};
+
 Economy.prototype.UPDATE_MARKET_SUMMARY_TABLE = function() {
 
   let subtitle_row = this.output_tables.market_summary.subtitle_row;
@@ -22,6 +53,13 @@ Economy.prototype.UPDATE_MARKET_SUMMARY_TABLE = function() {
   for (let i = 0; i < this.n_goods; i++) {
     arr[0].push('G[' + i + ']');
   }
+  
+  // THE PRICES
+  arr[1] = ['PRICES', 1];
+  for (let i = 0; i < this.SOLUTION.prices.length; i++) {
+    arr[1].push(this.SOLUTION.prices[i]); 
+  }
+  
   
   // CONSUMER DATA
   consumer_totals[0] = 'C';

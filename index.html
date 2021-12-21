@@ -3,10 +3,10 @@
 
 <!--
 
-little description
-add the equations
-compartmentalize a bit more
-add a little chart
+** sort out katex files on github
+** compartmentalize a bit more
+** solve for massive % ownership, edge cases : Test_Price_Vector.js
+** firm income statements : price, qty, revenue, wage bill, profit, profit breakdown
 
 -->
 
@@ -18,56 +18,112 @@ add a little chart
   <link rel="icon" href="index.png">
   
   <!-- the wonderful katex ! -->
-  <link rel="stylesheet" href="katex.min.css">
-  <script src="katex.min.js"></script>
+  <link rel="stylesheet" href="./katex/katex.min.css">
+  <script src="./katex/katex.min.js"></script>
 
 </head>
 
 <body>
 
- <div class='box'>
-  <table class='mytables'>
-   <tr>
-    <td>add consumer</td>
-    <td><button id='add_consumer_btn'>ADD consumer</button></td>
-   </tr>
-   <tr>
-    <td>add firm</td>
-    <td><button id='add_firm_btn'>ADD firm</button></td>
-   </tr>
-  </table>
- </div>
- <div class='box'>
-  <table class='mytables'>
-    <tr><td style="font-weight: bold; text-align: center;" colspan="99">PROCEDURE</td></tr>
-    <tr><td>FIRMS</td><td>CONSUMERS</td></td>
-    <tr style='vertical-align: top;'>
+
+   <div class='box section'>
+    <table class='mytables'>
+     <tr>
+      <td>add consumer</td>
+      <td><button id='add_consumer_btn'>ADD consumer</button></td>
+     </tr>
+     <tr>
+      <td>add firm</td>
+      <td><button id='add_firm_btn'>ADD firm</button></td>
+     </tr>
+    </table>
+
+ 
+   <div class='box'>
+   <p><span class='blue'> n consumers : </span></p> 
+   <ul>
+    <li><p> each wants both goods + leisure </p>
+    <li><p> each can supply labor, which is identical </p>
+    <li><p> each owns a part of every firm </p>
+   </ul>
+   <p><span class='green'> m firms : </span></p>
+   <ul>
+    <li><p> each firm produces one good </p>
+    <li><p> each firm produces a different good from every other firm </p>
+    <li><p> firm profits are paid as dividends, on the basis of ownership </p>
+   </ul>
+
+<!--
+  <p>If rich, the agent supplies no labor. Look at <span class='inline-code'>consumer[0]</span>.</p>
+  <p>Is this solution unique?</p></li>
+-->
+  </div>
+ 
+
+  <table class='box mytables'>
+    <tr><th colspan="99">PROCEDURE</th></tr>
+    <tr><th>FIRMS</th><th>CONSUMERS</th></tr>
+    <tr>
      <td>
-      <p><span class='math'>\pi^*_j = p_j \cdot A_j \cdot \ln z_j - w z_j </span></p>
+      <p><span class='math'>y_j = A_j \cdot \ln z_j </span></p>
+      <p><span class='math'>\pi_j = p_j \cdot A_j \cdot \ln z_j - w \cdot z_j </span></p>
+      <p style='border-bottom: 1px solid #ddd'></p>
+      <p><span class='math'>\pi^*_j = p_j \cdot A_j \cdot \ln z_j - w \cdot z_j </span></p>
       <p><span class='math'>z^*_j = A_j \cdot \frac{p_j}{w}</span></p>
+      <!-- z > 1, or else production is negative -->
       <p><span class='math'>y^*_j = A_j \cdot \ln ( A_j \cdot \frac{p_j}{w})</span></p>
       <p><span class='math'>\pi^*_j = p_j \cdot A_j \cdot ( \ln (A_j \cdot \frac{p_j}{w}) - 1 )</span></p>
      </td>
      <td>
-      <p><span class='math'>u_i = \Sigma^2_{j=0} \alpha_{ij} \cdot \ln x_{ij} + \beta_i \cdot \ln b_{i}</span></p>
-      <p><span class='math'>M_{i} = w \cdot L_i + \Sigma^2_{j=0} \theta_{ij} \cdot \pi_{j}</span></p>
+      <p><span class='math'>u_i = \Sigma^m_{j=0} \alpha_{ij} \cdot \ln x_{ij} + \beta_i \cdot \ln b_{i}</span></p>
+      <p><span class='math'>M_{i} = w \cdot L_i + \Sigma^m_{j=0} \theta_{ij} \cdot \pi_{j}</span></p>
       <p><span class='math'>b_i \le L_i</span></p>
-      <p><span class='math'>x_{ij} = \frac{\alpha_{ij}}{\Sigma \alpha + \beta} \cdot \frac{M_i}{p_0}</span></p>
+      <p><span class='math'>x_{ij} = \frac{\alpha_{ij}}{\Sigma \alpha + \beta} \cdot \frac{M_i}{p_i}</span></p>
       <p><span class='math'>b_{i} = \frac{\beta_i}{\Sigma \alpha + \beta} \cdot \frac{M_i}{w}</span></p>
       <p><span class='math'>n_{i} = L_i - b_i</span></p>
      </td>
     </tr>
   </table>
+
+ 
  </div>
  
  <div class='box' id='input_container'></div>
  <div class='box' id='output_container'></div>
+ 
+
+  <table class='box mytables'>
+  <tr><th colspan='99'><p>MARKET EQUILIBRIUM (IGNORING EDGE CASES) </p></th></tr>
+<tr><th>L[0]</th><td><p class='math'>\displaystyle\sum_{i=0}^n \underbrace{ \Bigg ( {L_i - \dfrac{\beta_i}{\sum_{j=0}^m \alpha_{ij} + \beta_i} \cdot \dfrac{wL_i + \sum_{j=0}^{m} \theta_{ij} \cdot \pi_j}{w}} \Bigg ) }_{\text{consumer i labor supply}} = \displaystyle\sum_{j=0}^m \underbrace{ A_j \cdot \dfrac{p_j}{w} }_{\text{firm j \newline labor demand}} </p></td></tr>
+
+
+  <tr><th>G[j]</th><td>
+  <p class='math'>
+  
+\displaystyle\sum_{i=0}^n \underbrace{ \Bigg ( 
+
+{\dfrac{\alpha_{ij}}{\sum_{j=0}^m \alpha_{ij} + \beta_i} \cdot \dfrac{wL_i + \sum_{j=0}^{m} \theta_{ij} \cdot \pi_j}{p_{j}}}
+
+\Bigg ) }_{\text{consumer i demand for good j}} = 
+  
+  
+ 
+  
+   \underbrace{ A_j \cdot \ln ( A_j \cdot \frac{p_j}{w}) }_{\text{only firm j makes good j}}</p></td></tr>
+</table>
+ 
+
+ 
 </body>
 
-<script src='agents.js'></script>
+<script src='Linked_Input.js'></script>
+<script src='Agents.js'></script>
+<script src='Economy.js'></script>
+
 <script src='Test_Price_Vector.js'></script>
 <script src='Find_Price_Vector_Solution.js'></script>
 <script src='Display_Solution.js'></script>
+<script src='UPDATE_OUTPUT_ALLOCATION_TABLE.js'></script>
 <script src='setup_main.js'></script>
 
 <script>

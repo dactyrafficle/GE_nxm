@@ -3,7 +3,7 @@
 There are:
 
  * n consumers
- * m firms
+ * m firms : 1 good each
  * each firm makes 1 good, which is different from every other good
  
 The approach I'm using to solve this is very naive. 
@@ -19,3 +19,6 @@ The algorithm starts at some price vector, and walks in the direction of improve
 The results are easy to verify. But the methodology, I'm not too sure about. It works here, but I don't know what conditions need to be met for it work. Because in other, more complex markets, this method does not work.
 
 https://dactyrafficle.github.io/GE_nxm/
+
+
+I'm using KaTeX to render the bit of math I've added : https://github.com/KaTeX/KaTeX/releases

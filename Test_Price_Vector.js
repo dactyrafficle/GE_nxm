@@ -1,4 +1,13 @@
 
+/*
+
+  NEED TO TEST FOR :
+    1. b > L, meaning the consumer wants more leisure than is possible
+    2. z < 1, meaning the optimal labor demand for a firm yields negative production
+    3. profit < 0, meaning the firm will lose money.
+
+*/
+
 Economy.prototype.Test_Price_Vector = function(wages, prices) {
 
   let TEST_SOLUTION = {

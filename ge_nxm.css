@@ -1,35 +1,57 @@
- html, body {
-   font-family: calibri;
- }
- 
- table.mytables {
-   border-collapse: collapse;
-   margin: 1vh;
- }
- 
- .mytables td, .mytables th {
-   border: 1px solid #ddd;
-   padding: 0.75vh;
- }
- 
- 
- .mytables td {
-   text-align: right;
- }
- 
- 
- .mytables input {
-   width: 70px;
- }
- 
-.box {
- border: 1px solid #ddd;
- padding: 1vh;
- margin: 1vh;
- vertical-align: top;
- display: inline-block;
+html, body {
+ font-family: calibri;
 }
 
-th.row_header {
+div.box {
+ display: inline-block;
+ border: 1px solid #ddd;
+ vertical-align: top;
+ padding: 1vh;
+ margin: 1vh;
+}
+div.section {
+ border: 1px solid #ddd;
+ vertical-align: top;
+ padding: 1vh;
+ margin: 1vh;
+}
+
+table.mytables {
+ border-collapse: collapse;
+ padding: 1vh;
+ margin: 1vh;
+}
+table.mytables td, table.mytables th {
+ border: 1px solid #ddd;
+ padding: 1vh;
+}
+table.mytables td {
+ text-align: right;
+}
+table.mytables input {
+ width: 60px;
+}
+
+table.mytables th.row_header {
   text-align: left;
+}
+
+span.blue {
+  color: #85a3e0;
+  background-color: #fff;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding: 1vh;
+}
+span.green {
+  color: #a7d2ab;
+  background-color: #fff;
+  font-weight: bold;
+  font-size: 1.5em;
+  padding: 1vh;
+}
+
+table.mytables tr td p {
+ vertical-align: top;
+ text-align: left;
 }
