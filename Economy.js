@@ -37,6 +37,21 @@ function Economy()  {
 
 }
 
+let consumer_preferences_min = 0.01;
+let consumer_preferences_max = 9.99;
+let consumer_preferences_step = 0.01;
+let consumer_preferences_decimal = 2;
+
+let consumer_shares_step = 1;
+let consumer_shares_min = 0;
+let consumer_shares_max = 999;
+let consumer_shares_decimal = 0;
+
+let firm_technology_step = 0.01;
+let firm_technology_min = 1;
+let firm_technology_max = 9.99;
+let firm_technology_decimal = 2;
+
 Economy.prototype.UPDATE_INPUT_TABLES = function() {
   this.UPDATE_CONSUMER_PREFERENCES_TABLE();
   this.UPDATE_CONSUMER_SHARES_TABLE();
@@ -46,7 +61,7 @@ Economy.prototype.UPDATE_INPUT_TABLES = function() {
 Economy.prototype.UPDATE_OUTPUT_TABLES = function() {
   this.UPDATE_MARKET_SUMMARY_TABLE();
   this.UPDATE_OUTPUT_ALLOCATION_TABLE();
-  // this.UPDATE_MARKET_EQUILIBRIUM_TABLE();
+  this.UPDATE_CONSUMER_SHARES_TABLE_PERCENTAGES();
 };
 
 // THIS IS A GOOD BASE
@@ -156,9 +171,30 @@ Economy.prototype.UPDATE_CONSUMER_SHARES_TABLE = function() {
     for (let x = 0; x < this.consumers[y].preferences.goods.length; x++) {
       let td = document.createElement('td');
       td.appendChild(this.consumers[y].ownership.shares[x].input);
+      
+      // PERCENTAGE OF OWNERSHIP
+      let p = document.createElement('div');
+      p.id = 'consumer-shares-pct-' + y + '-' + x;
+      p.style.padding = '2px';
+      p.style.textAlign = 'center';
+      td.appendChild(p);
+      
       tr.appendChild(td);
     }
   } 
+}
+
+Economy.prototype.UPDATE_CONSUMER_SHARES_TABLE_PERCENTAGES = function() {
+  
+  // let subtitle_row = this.input_tables.consumer_shares.subtitle_row;
+  // let tbody = this.input_tables.consumer_shares.tbody;
+
+  for (let y = 0; y < this.n_consumers; y++) {
+    for (let x = 0; x < this.n_firms; x++) {
+      let p = document.getElementById('consumer-shares-pct-' + y + '-' + x);
+      p.innerHTML = (this.consumers[y].ownership.percentage[x]).toFixed(3);
+    }
+  }   
 }
 
 Economy.prototype.UPDATE_FIRM_TECHNOLOGY_TABLE = function() {
@@ -212,15 +248,40 @@ Economy.prototype.ADD_FIRM = function() {
   
   // GIVE IT A TECH VALUE OF 0 FOR ALL EXISTING GOODS
   for (let i = 0; i < this.n_firms; i++) {
-    new_firm.technology.push(new Linked_Input(this, 0, 0.001));
+    new_firm.technology.push(new Linked_Input({
+      'Economy':this,
+      'value':0,
+      'step':firm_technology_step,
+      'min':0,
+      'max':firm_technology_max,
+      'decimal':firm_technology_decimal,
+      'disabled':true
+    })); 
   }
   
   // GIVE IT A REAL TECH VALUE FOR THE NEW GOOD
-  new_firm.technology[this.n_firms-1] = new Linked_Input(this, return_firm_technology_level(), 0.001);
-  
+  new_firm.technology[this.n_firms-1] = new Linked_Input({
+    'Economy':this,
+    'value':return_firm_technology_level(),
+    'step':firm_technology_step,
+    'min':firm_technology_min,
+    'max':firm_technology_max,
+    'decimal':firm_technology_decimal,
+    'disabled':false
+  });
+
   // GIVE EXISTING FIRMS A TECH VALUE OF 0 FOR THE NEW GOOD
   for (let i = 0; i < this.n_firms-1; i++) {
-    this.firms[i].technology.push(new Linked_Input(this, 0, 0.001));
+    this.firms[i].technology.push(new Linked_Input({
+      'Economy':this,
+      'value':0,
+      'step':firm_technology_step,
+      'min':0,
+      'max':firm_technology_max,
+      'decimal':firm_technology_decimal,
+      'disabled':true
+    }));
+    
   }
 
   // UPDATE CONSUMER VALUES
@@ -228,12 +289,28 @@ Economy.prototype.ADD_FIRM = function() {
     
     // GIVE ALL EXISTING CONSUMERS A PREFERENCE VALUE FOR THE NEW GOOD
     let x = return_goods_preference();
-    this.consumers[i].preferences.goods.push(new Linked_Input(this, x, 0.01));
+    this.consumers[i].preferences.goods.push(new Linked_Input({
+      'Economy':this,
+      'value':x,
+      'step':consumer_preferences_step,
+      'min':consumer_preferences_min,
+      'max':consumer_preferences_max,
+      'decimal':consumer_preferences_decimal,
+      'disabled':false
+    }));
     this.consumers[i].preferences.sum += x
     
     // GIVE ALL EXISTING CONSUMERS A SHARE OWNERSHIP OF THE NEW FIRM
     let share_allocation = return_shares_allocation();
-    this.consumers[i].ownership.shares.push(new Linked_Input(this, share_allocation, 1));
+    this.consumers[i].ownership.shares.push(new Linked_Input({
+      'Economy':this,
+      'value':share_allocation,
+      'step':consumer_shares_step,
+      'min':consumer_shares_min,
+      'max':consumer_shares_max,
+      'decimal':consumer_shares_decimal,
+      'disabled':false
+    })); 
 
     // RECORD THE TOTAL NUMBER OF SHARES ISSUED
     new_firm.shares_outstanding += share_allocation;
@@ -250,7 +327,6 @@ Economy.prototype.ADD_FIRM = function() {
   this.firms.push(new_firm);
 }
 
-
 Economy.prototype.UPDATE_CONSUMER_PREFERENCE_SUM = function() {
 
   let sum = 0;
@@ -263,6 +339,7 @@ Economy.prototype.UPDATE_CONSUMER_PREFERENCE_SUM = function() {
     this.consumers[i].preferences.sum = sum;
   }
 };
+
 
 Economy.prototype.UPDATE_FIRM_SHARES_OUTSTANDING = function() {
   
@@ -302,20 +379,46 @@ Economy.prototype.ADD_CONSUMER = function() {
   let new_consumer = new Consumer();
   
   let leisure_rv = return_leisure_preference();
-  new_consumer.preferences.leisure.push(new Linked_Input(this, leisure_rv, 0.01)),
+  new_consumer.preferences.leisure.push(new Linked_Input({
+      'Economy':this,
+      'value':leisure_rv,
+      'step':consumer_preferences_step,
+      'min':consumer_preferences_min,
+      'max':consumer_preferences_max,
+      'decimal':consumer_preferences_decimal,
+      'disabled':false
+    })); 
+  
+  // new Linked_Input(this, leisure_rv, 0.01)),
   new_consumer.preferences.sum += leisure_rv;
   
   for (let i = 0; i < this.n_firms; i++) {
     
     // GIVE THIS CONSUMER A PREFERENCE FOR EACH EXISTING GOOD
     let x = return_goods_preference();
-    new_consumer.preferences.goods.push(new Linked_Input(this, x, 0.01));
+    new_consumer.preferences.goods.push(new Linked_Input({
+      'Economy':this,
+      'value':x,
+      'step':consumer_preferences_step,
+      'min':consumer_preferences_min,
+      'max':consumer_preferences_max,
+      'decimal':consumer_preferences_decimal,
+      'disabled':false
+    })); 
     new_consumer.preferences.sum += x;
     
     // GIVE THIS CONSUMER A SHARE ALLOCATION FOR EACH EXISTING FIRM
     let share_allocation = return_shares_allocation();
-    new_consumer.ownership.shares.push(new Linked_Input(this, share_allocation, 1));
-    
+    new_consumer.ownership.shares.push(new Linked_Input({
+      'Economy':this,
+      'value':share_allocation,
+      'step':consumer_shares_step,
+      'min':consumer_shares_min,
+      'max':consumer_shares_max,
+      'decimal':consumer_shares_decimal,
+      'disabled':false
+    }));
+ 
     // RECORD THE INCREASED SHARE ALLOCATION FOR EACH FIRM
     this.firms[i].shares_outstanding += share_allocation;
     

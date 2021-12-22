@@ -1,3 +1,4 @@
+
 html, body {
  font-family: calibri;
 }
@@ -29,8 +30,12 @@ table.mytables td {
  text-align: right;
 }
 table.mytables input {
- width: 60px;
+ width: 50px;
+ text-align: right;
+ 
 }
+table.mytables input::-webkit-outer-spin-button, 
+table.mytables input::-webkit-inner-spin-button { margin-left: 5px; } 
 
 table.mytables th.row_header {
   text-align: left;

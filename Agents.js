@@ -56,7 +56,7 @@ function return_firm_technology_level() {
   let max_value = 7;
   let range = max_value - min_value;
   let raw_value = min_value + Math.random()*range;
-  let decimal_places = 3;
+  let decimal_places = 2;
   let multiplier = 10**decimal_places;
   let final_value = Math.floor(raw_value * multiplier) / multiplier;
   return final_value;
