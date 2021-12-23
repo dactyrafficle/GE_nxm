@@ -269,6 +269,8 @@ Economy.prototype.ADD_FIRM = function() {
   for (let i = 0; i < this.n_firms; i++) {
     new_firm.technology.push(new Linked_Input({
       'Economy':this,
+      'Consumer':null,
+      'Firm':new_firm,
       'value':0,
       'step':firm_technology_step,
       'min':0,
@@ -281,6 +283,8 @@ Economy.prototype.ADD_FIRM = function() {
   // GIVE IT A REAL TECH VALUE FOR THE NEW GOOD
   new_firm.technology[this.n_firms-1] = new Linked_Input({
     'Economy':this,
+    'Consumer':null,
+    'Firm':new_firm,
     'value':return_firm_technology_level(),
     'step':firm_technology_step,
     'min':firm_technology_min,
@@ -293,6 +297,8 @@ Economy.prototype.ADD_FIRM = function() {
   for (let i = 0; i < this.n_firms-1; i++) {
     this.firms[i].technology.push(new Linked_Input({
       'Economy':this,
+      'Consumer':null,
+      'Firm':this.firms[i],
       'value':0,
       'step':firm_technology_step,
       'min':0,
@@ -310,6 +316,8 @@ Economy.prototype.ADD_FIRM = function() {
     let x = return_goods_preference();
     this.consumers[i].preferences.goods.push(new Linked_Input({
       'Economy':this,
+      'Consumer':this.consumers[i],
+      'Firm':new_firm,
       'value':x,
       'step':consumer_preferences_step,
       'min':consumer_preferences_min,
@@ -323,6 +331,8 @@ Economy.prototype.ADD_FIRM = function() {
     let share_allocation = return_shares_allocation();
     this.consumers[i].ownership.shares.push(new Linked_Input({
       'Economy':this,
+      'Consumer':this.consumers[i],
+      'Firm':new_firm,
       'value':share_allocation,
       'step':consumer_shares_step,
       'min':consumer_shares_min,
@@ -346,48 +356,6 @@ Economy.prototype.ADD_FIRM = function() {
   this.firms.push(new_firm);
 }
 
-Economy.prototype.UPDATE_CONSUMER_PREFERENCE_SUM = function() {
-
-  let sum = 0;
-  for (let i = 0; i < this.consumers.length; i++) {
-    
-    sum = this.consumers[i].preferences.leisure[0].value;
-    for (let j = 0; j < this.consumers[i].preferences.goods.length; j++) {
-      sum += this.consumers[i].preferences.goods[j].value;
-    }
-    this.consumers[i].preferences.sum = sum;
-  }
-};
-
-
-Economy.prototype.UPDATE_FIRM_SHARES_OUTSTANDING = function() {
-  
-  // LOOK AT EACH FIRM
-  for (let j = 0; j < this.firms.length; j++) {
-
-    this.firms[j].shares_outstanding = 0;
-    
-    // FOR EACH CONSUMER
-    for (let i = 0; i < this.consumers.length; i++) {
-      this.firms[j].shares_outstanding += this.consumers[i].ownership.shares[j].value;
-    }
-  }
-}
-
-Economy.prototype.UPDATE_CONSUMER_OWNERSHIP_PERCENTAGES = function() {
-  
-  // FOR EACH CONSUMER
-  for (let i = 0; i < this.consumers.length; i++) {
-    
-    // LOOK AT EACH FIRM
-    for (let j = 0; j < this.firms.length; j++) {
-
-      this.consumers[i].ownership.percentage[j] = this.consumers[i].ownership.shares[j].value / this.firms[j].shares_outstanding;
-  
-    }
-  }
-  
-};
 
 Economy.prototype.ADD_CONSUMER = function() {
   
@@ -400,6 +368,8 @@ Economy.prototype.ADD_CONSUMER = function() {
   let leisure_rv = return_leisure_preference();
   new_consumer.preferences.leisure.push(new Linked_Input({
       'Economy':this,
+      'Consumer':new_consumer,
+      'Firm':null,
       'value':leisure_rv,
       'step':consumer_preferences_step,
       'min':consumer_preferences_min,
@@ -407,8 +377,6 @@ Economy.prototype.ADD_CONSUMER = function() {
       'decimal':consumer_preferences_decimal,
       'disabled':false
     })); 
-  
-  // new Linked_Input(this, leisure_rv, 0.01)),
   new_consumer.preferences.sum += leisure_rv;
   
   for (let i = 0; i < this.n_firms; i++) {
@@ -417,6 +385,8 @@ Economy.prototype.ADD_CONSUMER = function() {
     let x = return_goods_preference();
     new_consumer.preferences.goods.push(new Linked_Input({
       'Economy':this,
+      'Consumer':new_consumer,
+      'Firm':this.firms[i],
       'value':x,
       'step':consumer_preferences_step,
       'min':consumer_preferences_min,
@@ -430,6 +400,8 @@ Economy.prototype.ADD_CONSUMER = function() {
     let share_allocation = return_shares_allocation();
     new_consumer.ownership.shares.push(new Linked_Input({
       'Economy':this,
+      'Consumer':new_consumer,
+      'Firm':this.firms[i],
       'value':share_allocation,
       'step':consumer_shares_step,
       'min':consumer_shares_min,

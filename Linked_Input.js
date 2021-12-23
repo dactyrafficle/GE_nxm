@@ -4,6 +4,8 @@
 /*
 let obj = {
  'Economy':economy,
+ 'Consumer':consumer,
+ 'Firm':firm,
  'value':value,
  'step':step,
  'min':min,
@@ -17,6 +19,8 @@ function Linked_Input(obj) {
 
   // THE REQUIRED
   this.Economy = obj.Economy;
+  this.Consumer = obj.Consumer;
+  this.Firm = obj.Firm;
   this.value = obj.value;
   
   // THE INPUT ELEMENT
@@ -82,7 +86,7 @@ function Linked_Input(obj) {
     this.value = parseFloat(this.input.value);
     
     this.Economy.UPDATE_CONSUMER_PREFERENCE_SUM();
-    this.Economy.UPDATE_FIRM_SHARES_OUTSTANDING();
+    this.Economy.UPDATE_FIRM_SHARES_OUTSTANDING(this);
     this.Economy.UPDATE_CONSUMER_OWNERSHIP_PERCENTAGES();
     this.Economy.Find_Price_Vector_Solution();
     this.Economy.UPDATE_OUTPUT_TABLES();
