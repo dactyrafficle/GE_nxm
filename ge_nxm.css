@@ -26,6 +26,16 @@ table.mytables td, table.mytables th {
  border: 1px solid #ddd;
  padding: 1vh;
 }
+.mytables thead th {
+ min-width:30px;
+}
+
+tr.title-row th:hover {
+ background-color: #fafafa;
+}
+
+
+
 table.mytables td {
  text-align: right;
 }
@@ -59,4 +69,13 @@ span.green {
 table.mytables tr td p {
  vertical-align: top;
  text-align: left;
+}
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }

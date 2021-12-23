@@ -79,24 +79,45 @@ function Input_Table(obj) {
   this.table.appendChild(this.tbody);
  
   this.title_row = document.createElement('tr');
+  this.title_row.classList.add('title-row');
   this.thead.appendChild(this.title_row);
+
+  this.corner_cell = document.createElement('th');
+  this.title_row.appendChild(this.corner_cell);
   
   this.title_cell = document.createElement('th');
   this.title_row.appendChild(this.title_cell);
   this.title_cell.colSpan = 99;
   this.title_cell.innerHTML = obj.title;
-    
+  this.title_cell.classList.add('title-cell');
+
+  // HIDE-SHOW CONTENTS
+  this.title_cell.addEventListener('click', function(e) {
+    if (this.tbody.style.display === 'none') {
+      this.tbody.style.display = 'table-row-group';
+    } else {
+      this.tbody.style.display = 'none';
+    }
+  }.bind(this));
+
   this.subtitle_row = document.createElement('tr');
   this.thead.appendChild(this.subtitle_row);
- 
+
+
+  this.thead.classList.add('no-select');
+  this.tbody.classList.add('no-select');
 }
 
 
 
 Economy.prototype.UPDATE_CONSUMER_PREFERENCES_TABLE = function() {
-  
+
+  let title_row = this.input_tables.consumer_preferences.title_row;
   let subtitle_row = this.input_tables.consumer_preferences.subtitle_row;
   let tbody = this.input_tables.consumer_preferences.tbody;
+  
+  // tbody.style.display = 'none';
+  
   subtitle_row.innerHTML = '';
   tbody.innerHTML = '';
 
@@ -147,6 +168,8 @@ Economy.prototype.UPDATE_CONSUMER_SHARES_TABLE = function() {
   subtitle_row.innerHTML = '';
   tbody.innerHTML = '';
 
+  // tbody.style.display = 'none';
+
   (function() {
   let th = document.createElement('th');
   th.innerHTML = 'x';
@@ -185,10 +208,6 @@ Economy.prototype.UPDATE_CONSUMER_SHARES_TABLE = function() {
 }
 
 Economy.prototype.UPDATE_CONSUMER_SHARES_TABLE_PERCENTAGES = function() {
-  
-  // let subtitle_row = this.input_tables.consumer_shares.subtitle_row;
-  // let tbody = this.input_tables.consumer_shares.tbody;
-
   for (let y = 0; y < this.n_consumers; y++) {
     for (let x = 0; x < this.n_firms; x++) {
       let p = document.getElementById('consumer-shares-pct-' + y + '-' + x);

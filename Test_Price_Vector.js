@@ -65,7 +65,6 @@ Economy.prototype.Test_Price_Vector = function(wages, prices) {
       firm.profit[0] += profit;
       
     }
-    
   }
   
   // FOR EACH CONSUMER :
@@ -89,15 +88,36 @@ Economy.prototype.Test_Price_Vector = function(wages, prices) {
       consumer.budget[0] += this.consumers[i].ownership.percentage[j] * TEST_SOLUTION.firms[j].profit[0];
     }
     
-    // GOODS DEMAND
+    // THESE 2 VARIABLES MAY CHANGE IF b > L
+    let sum = this.consumers[i].preferences.sum;
+    let M = consumer.budget[0];
     
+    // SOLVE LEISURE DEMAND FIRST, BECAUSE IT MIGHT EXCEED THE LEISURE ENDOWMENT
+    let a = this.consumers[i].preferences.leisure[0].value;
+    let w = TEST_SOLUTION.wages[0];
+    
+    let b = (a / sum) * (M / w);      // LEISURE DEMAND
+    let n = this.consumers[i].L - b;  // LABOR SUPPLY
+
+    // IF LEISURE DEMAND > LEISURE ENDOWMENT
+    if (b > this.consumers[i].L) {
+      b = this.consumers[i].L;
+      n = 0;
+      sum = this.consumers[i].preferences.sum - this.consumers[i].preferences.leisure[0].value;
+      M = consumer.budget[0] - this.consumers[i].L;
+    }
+    consumer.leisure_demand[0] = b;
+    consumer.labor_supply[0] = n;
+    
+    // CONSUMER LABOR SUPPLY
+    TEST_SOLUTION.markets.labor[0].supply += n;
+    
+    // GOODS DEMAND
     for (let j = 0; j < this.firms.length; j++) {
       consumer.goods_demand.push(0);
     
       // GET GOODS DEMAND
       let a = this.consumers[i].preferences.goods[j].value;
-      let sum = this.consumers[i].preferences.sum;
-      let M = consumer.budget[0];
       let p = TEST_SOLUTION.prices[j];
       let x = (a / sum) * (M / p);
       
@@ -105,18 +125,7 @@ Economy.prototype.Test_Price_Vector = function(wages, prices) {
       consumer.goods_demand[j] += x; 
     }
     
-    // CONSUMER LEISURE DEMAND
-    let a = this.consumers[i].preferences.leisure[0].value;
-    let sum = this.consumers[i].preferences.sum;
-    let M = consumer.budget[0];
-    let w = TEST_SOLUTION.wages[0];
-    let b = (a / sum) * (M / w);
-    consumer.leisure_demand[0] = b;
-      
-    // CONSUMER LABOR SUPPLY
-    let n = this.consumers[i].L - b;
-    TEST_SOLUTION.markets.labor[0].supply += n;
-    consumer.labor_supply[0] = n;
+
   }
 
   // CRASH MARKETS

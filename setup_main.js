@@ -43,10 +43,43 @@ window.onload = function() {
     e.Find_Price_Vector_Solution();
     e.UPDATE_OUTPUT_TABLES();
   });
-
 }
 
+function arr_to_csv_string(arr) {
 
+  let csv_string = '';
+  let n = arr.length - 1;
 
+  for (let i = 0; i < n; i++) {
+   csv_string += arr[i] + ',';
+  }
+  csv_string += arr[n];
+
+  return csv_string;
+}
+
+function arr_of_arr_to_csv_string(arr) {
+  
+  let csv_string = '';
+  let n = arr.length;
+  
+  // EACH ROW
+  for (let i = 0; i < n; i++) {
+   csv_string += arr_to_csv_string(arr[i]);
+   csv_string += '\n';
+  }
+  return csv_string;
+}
+function export_csv_string(csv_string) {
+
+  let a = document.createElement('a');
+  a.href = 'data:,' + encodeURI(csv_string); // this really is key
+  a.target = '_blank';
+  a.download = 'name.csv';
+  a.click();
+  a.remove();
+}
+
+ 
 
 

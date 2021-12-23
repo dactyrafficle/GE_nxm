@@ -15,13 +15,28 @@ Economy.prototype.UPDATE_OUTPUT_ALLOCATION_TABLE = function() {
   tbody.appendChild(tr);
   let th = document.createElement('th');
   tr.appendChild(th);
-  th.innerHTML = 'x';
+  th.innerHTML = '&middot;';
+
+  (function(){
+    let th = document.createElement('th');
+    tr.appendChild(th);
+    th.innerHTML = 'n';
+  })();
+
+  (function(){
+    let th = document.createElement('th');
+    tr.appendChild(th);
+    th.innerHTML = 'b';
+  })();
+
+  
+  
   for (let y = 0; y < this.n_goods; y++) {
     let th = document.createElement('th');
     tr.appendChild(th);
-    th.innerHTML = 'G[' + y + ']';
+    th.innerHTML = 'x<sub>' + y + '</sub>';
   }
-  
+
   for (let y = 0; y < this.n_consumers; y++) {
     
     let tr = document.createElement('tr');
@@ -30,23 +45,60 @@ Economy.prototype.UPDATE_OUTPUT_ALLOCATION_TABLE = function() {
     let th = document.createElement('th');
     tr.appendChild(th);
     th.innerHTML = 'C[' + y + ']';
+    
+    // LABOR SUPPLY
+    
+    (function() {
       
+      let td = document.createElement('td');
+      tr.appendChild(td);
+
+      td.appendChild(returnCircle({
+        'value':this.SOLUTION.consumers[y].labor_supply[0],
+        'color_string':'#d9f2e6'
+      }));
+     
+    }.bind(this))();
+    
+    // LEISURE DEMAND
+    
+    (function() {
+      
+      let td = document.createElement('td');
+      tr.appendChild(td);
+
+      td.appendChild(returnCircle({
+        'value':this.SOLUTION.consumers[y].leisure_demand[0],
+        'color_string':'#c2d1f0'
+      }));
+     
+    }.bind(this))();
+    
+    
     for (let x = 0; x < this.n_firms; x++) {
+      
       let td = document.createElement('td');
       tr.appendChild(td);
       
-      let div = document.createElement('div');
-      td.appendChild(div);
+      td.appendChild(returnCircle({
+        'value':this.SOLUTION.consumers[y].goods_demand[x],
+        'color_string':'#ffe680'
+      }));
       
-      let s_sq = this.SOLUTION.consumers[y].goods_demand[x];
-      // console.log(s_sq);
-      let s = Math.sqrt(s_sq);
-      div.style.backgroundColor = '#fc0';
-      div.style.width = s*10 + 'px';
-      div.style.height = s*10 + 'px';
-      div.style.borderRadius = '50%';
-      
+
     }
   }
 
 };
+
+function returnCircle(obj) {
+  let div = document.createElement('div');
+  let s_sq = obj.value;
+  let s = Math.sqrt(s_sq);
+  div.style.backgroundColor = obj.color_string;
+  div.style.width = s*10 + 'px';
+  div.style.height = s*10 + 'px';
+  div.style.borderRadius = '50%';
+  div.style.margin = '0 auto';
+  return div;
+}

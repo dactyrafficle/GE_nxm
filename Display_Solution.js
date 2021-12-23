@@ -27,19 +27,31 @@ let str2 = '\\displaystyle\\sum_{i=0}^n \\Bigg ( {L_i - \\dfrac{\\beta_i}{\\sum_
   tr.appendChild(td);
   
   td.appendChild(s);
-  
-
 };
 
 Economy.prototype.UPDATE_MARKET_SUMMARY_TABLE = function() {
 
+  let title_row = this.output_tables.market_summary.title_row;
+  let corner_cell = this.output_tables.market_summary.corner_cell;
+  let title_cell = this.output_tables.market_summary.title_cell;
   let subtitle_row = this.output_tables.market_summary.subtitle_row;
   let tbody = this.output_tables.market_summary.tbody;
   subtitle_row.innerHTML = '';
   tbody.innerHTML = '';
-
-  let arr = [];
+  corner_cell.innerHTML = '';
   
+  let download_btn = document.createElement('div');
+  download_btn.innerHTML = "DL";
+  corner_cell.appendChild(download_btn);
+  
+  
+  let arr = [];
+  download_btn.addEventListener('click', function(e) {
+    console.log(e);
+    let csv_string = arr_of_arr_to_csv_string(arr);
+    export_csv_string(csv_string);
+  });
+
   let n_cols = this.n_leisures + this.n_goods + 1;
   let consumer_totals = [], firm_totals = [], totals = [];
   for (let i = 0; i < n_cols; i++) {
@@ -107,5 +119,6 @@ Economy.prototype.UPDATE_MARKET_SUMMARY_TABLE = function() {
       td.innerHTML = (parseFloat(arr[y][x])+0 === parseFloat(arr[y][x])) ? (arr[y][x].toFixed(4)) : (arr[y][x]);
     }
   }
+  // console.log(arr);
   
 }
