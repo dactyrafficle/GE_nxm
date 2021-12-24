@@ -20,13 +20,13 @@ Economy.prototype.UPDATE_OUTPUT_ALLOCATION_TABLE = function() {
   (function(){
     let th = document.createElement('th');
     tr.appendChild(th);
-    th.innerHTML = 'n';
+    th.innerHTML = 'n[0]';
   })();
 
   (function(){
     let th = document.createElement('th');
     tr.appendChild(th);
-    th.innerHTML = 'b';
+    th.innerHTML = 'b[0]';
   })();
 
   
@@ -34,7 +34,7 @@ Economy.prototype.UPDATE_OUTPUT_ALLOCATION_TABLE = function() {
   for (let y = 0; y < this.n_goods; y++) {
     let th = document.createElement('th');
     tr.appendChild(th);
-    th.innerHTML = 'x<sub>' + y + '</sub>';
+    th.innerHTML = 'x[' + y + ']';
   }
 
   for (let y = 0; y < this.n_consumers; y++) {

@@ -26,8 +26,10 @@
 <body>
 
 
-   <div class='box section'>
-    <table class='mytables'>
+   <div class='box no-select'>
+    <div class='section section-title' id='general'><div class='title-cell'> GENERAL </div></div>
+   
+    <table class='mytables' id='buttons'>
      <tr>
       <td>add consumer</td>
       <td><button id='add_consumer_btn'>ADD consumer</button></td>
@@ -39,7 +41,7 @@
     </table>
 
  
-  <table class='box mytables infobox'>
+  <table class='mytables' id='descriptions'>
     <thead>
     <tr><th colspan="99"> LITTLE DESCRIPTION </th></tr>
     <tr></tr>
@@ -62,13 +64,8 @@
    </ul>
   </td></tr></tbody>
   </table>
-<!--
-  <p>If rich, the agent supplies no labor. Look at <span class='inline-code'>consumer[0]</span>.</p>
-  <p>Is this solution unique?</p></li>
--->
 
-
-  <table class='box mytables infobox'>
+  <table class='mytables' id='procedures'>
     <thead>
      <tr><th colspan="99" class='infobox-title'> PROCEDURE </th></tr>
     </thead>
@@ -97,14 +94,7 @@
     </tbody>
   </table>
 
- 
- </div>
- 
- <div class='box' id='input_container'></div>
- <div class='box' id='output_container'></div>
- 
-
-  <table class='box mytables'>
+  <table class='mytables' id='equilibrium'>
   <tr><th colspan='99'><p>MARKET EQUILIBRIUM (IGNORING EDGE CASES) </p></th></tr>
 <tr><th>L[0]</th><td><p class='math'>\displaystyle\sum_{i=0}^n \underbrace{ \Bigg ( {L_i - \dfrac{\beta_i}{\sum_{j=0}^m \alpha_{ij} + \beta_i} \cdot \dfrac{wL_i + \sum_{j=0}^{m} \theta_{ij} \cdot \pi_j}{w}} \Bigg ) }_{\text{consumer i labor supply}} = \displaystyle\sum_{j=0}^m \underbrace{ A_j \cdot \dfrac{p_j}{w} }_{\text{firm j \newline labor demand}} </p></td></tr>
 
@@ -124,6 +114,15 @@
    \underbrace{ A_j \cdot \ln ( A_j \cdot \frac{p_j}{w}) }_{\text{only firm j makes good j}}</p></td></tr>
 </table>
  
+ 
+ </div>
+ 
+ <div class='box' id='input_container'></div>
+ <div class='box' id='output_container'></div>
+ 
+
+
+ 
 
  
 </body>
@@ -133,10 +132,15 @@
 <script src='Economy.js'></script>
 <script src='Validate_Input_Values.js'></script>
 
+
 <script src='Test_Price_Vector.js'></script>
 <script src='Find_Price_Vector_Solution.js'></script>
 <script src='Display_Solution.js'></script>
+
+<script src='UPDATE_TABLES.js'></script>
+
 <script src='UPDATE_OUTPUT_ALLOCATION_TABLE.js'></script>
+
 <script src='setup_main.js'></script>
 
 <script>

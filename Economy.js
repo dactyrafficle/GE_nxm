@@ -32,7 +32,8 @@ function Economy()  {
 
   this.output_tables = {
     'market_summary': new Input_Table({'key':'market_summary','title':'MARKET SUMMARY'}),
-    'output_allocation': new Input_Table({'key':'output_allocation','title':'OUTPUT ALLOCATION'})
+    'output_allocation': new Input_Table({'key':'output_allocation','title':'OUTPUT ALLOCATION'}),
+    'income_statement': new Input_Table({'key':'income_statement','title':'INCOME STATEMENT'}), 
   }
 
 }
@@ -52,17 +53,7 @@ let firm_technology_min = 1;
 let firm_technology_max = 9.99;
 let firm_technology_decimal = 2;
 
-Economy.prototype.UPDATE_INPUT_TABLES = function() {
-  this.UPDATE_CONSUMER_PREFERENCES_TABLE();
-  this.UPDATE_CONSUMER_SHARES_TABLE();
-  this.UPDATE_FIRM_TECHNOLOGY_TABLE();
-};
 
-Economy.prototype.UPDATE_OUTPUT_TABLES = function() {
-  this.UPDATE_MARKET_SUMMARY_TABLE();
-  this.UPDATE_OUTPUT_ALLOCATION_TABLE();
-  this.UPDATE_CONSUMER_SHARES_TABLE_PERCENTAGES();
-};
 
 // THIS IS A GOOD BASE
 function Input_Table(obj) {
@@ -90,18 +81,23 @@ function Input_Table(obj) {
   this.title_cell.colSpan = 99;
   this.title_cell.innerHTML = obj.title;
   this.title_cell.classList.add('title-cell');
-
+  
+  this.subtitle_row = document.createElement('tr');
+  this.subtitle_row.classList.add('subtitle-row');
+  this.thead.appendChild(this.subtitle_row);
+  
   // HIDE-SHOW CONTENTS
   this.title_cell.addEventListener('click', function(e) {
     if (this.tbody.style.display === 'none') {
+      this.subtitle_row.style.display = 'table-row';
       this.tbody.style.display = 'table-row-group';
     } else {
+      this.subtitle_row.style.display = 'none';
       this.tbody.style.display = 'none';
     }
   }.bind(this));
 
-  this.subtitle_row = document.createElement('tr');
-  this.thead.appendChild(this.subtitle_row);
+
 
 
   this.thead.classList.add('no-select');
@@ -116,26 +112,24 @@ Economy.prototype.UPDATE_CONSUMER_PREFERENCES_TABLE = function() {
   let subtitle_row = this.input_tables.consumer_preferences.subtitle_row;
   let tbody = this.input_tables.consumer_preferences.tbody;
   
-  // tbody.style.display = 'none';
-  
   subtitle_row.innerHTML = '';
   tbody.innerHTML = '';
 
   (function() {
   let th = document.createElement('th');
-  th.innerHTML = 'x';
+  th.innerHTML = '&middot;';
   subtitle_row.appendChild(th);
   })();
 
   for (let x = 0; x < this.n_firms; x++) {
   let th = document.createElement('th');
-  th.innerHTML = 'G[' + x + ']';
+  th.innerHTML = 'x[' + x + ']';
   subtitle_row.appendChild(th);
   }
 
   (function() {
   let th = document.createElement('th');
-  th.innerHTML = 'L[0]';
+  th.innerHTML = 'b[0]';
   subtitle_row.appendChild(th);
   })();
 
@@ -172,7 +166,7 @@ Economy.prototype.UPDATE_CONSUMER_SHARES_TABLE = function() {
 
   (function() {
   let th = document.createElement('th');
-  th.innerHTML = 'x';
+  th.innerHTML = '&middot;';
   subtitle_row.appendChild(th);
   })();
 
@@ -227,14 +221,14 @@ Economy.prototype.UPDATE_FIRM_TECHNOLOGY_TABLE = function() {
   // THE CORNER X
   (function() {
     let th = document.createElement('th');
-    th.innerHTML = 'x';
+    th.innerHTML = '&middot;';
     subtitle_row.appendChild(th);
   })();
 
   // COLUMN HEADERS
   for (let x = 0; x < this.n_firms; x++) {
     let th = document.createElement('th');
-    th.innerHTML = 'G[' + x + ']';
+    th.innerHTML = 'x[' + x + ']';
     subtitle_row.appendChild(th);
   }
 

@@ -1,4 +1,4 @@
-** someone has to have at least 1 share in a company
+
 ** minimize infoboxes
 ** add a button to set ownerships % for neat results
 ** new animation for output

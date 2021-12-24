@@ -1,4 +1,90 @@
 
+Economy.prototype.UPDATE_INCOME_STATEMENT_TABLE = function() {
+  
+  let subtitle_row = this.output_tables.income_statement.subtitle_row;
+  let tbody = this.output_tables.income_statement.tbody;
+  subtitle_row.innerHTML = '';
+  tbody.innerHTML = '';
+  
+  let arr = [];
+  
+  arr.push(['p']);
+  for (let i = 0; i < this.SOLUTION.prices.length; i++) {
+    arr[0].push(this.SOLUTION.prices[i]);
+  }
+  
+  arr.push(['q']);
+  for (let i = 0; i < this.SOLUTION.prices.length; i++) {
+    arr[1].push(this.SOLUTION.firms[i].output_supply[i]);
+  }
+  
+  arr.push(['r']);
+  for (let i = 0; i < this.SOLUTION.prices.length; i++) {
+    arr[2].push(arr[0][i+1] * arr[1][i+1]);
+  }
+  
+  arr.push(['z @w=1']);
+  for (let i = 0; i < this.SOLUTION.prices.length; i++) {
+    arr[3].push(this.SOLUTION.firms[i].labor_demand[0]);
+  }
+  
+  arr.push(['&pi;']);
+  for (let i = 0; i < this.SOLUTION.prices.length; i++) {
+    arr[4].push(arr[2][i+1] - arr[3][i+1]);
+  }
+  
+  // for each consumer
+  
+  for (let y = 0; y < this.n_consumers; y++) {
+    arr.push(['C[' + y + ']']);
+    for (let x = 0; x < this.n_firms; x++) {
+      arr[5+y].push(this.consumers[y].ownership.percentage[x]);
+    }
+    let dividends_total = 0;
+    for (let x = 0; x < this.n_firms; x++) {
+      let s = this.consumers[y].ownership.percentage[x]*arr[4][x+1];
+      dividends_total += s
+      arr[5+y].push(s);
+    }
+    for (let x = 0; x < this.n_firms; x++) {
+      
+      if (x === y) {
+        arr[5+y].push(dividends_total);
+      } else {
+        arr[5+y].push('&middot;');
+      }
+    }
+  }
+  
+  arr.push(['L']);
+arr.push(['Budget, M']);
+arr.push(['Leisure Demand, b']);
+arr.push(['Labor Supply, n']);
+arr.push(['Income']);
+
+for (let i = 0; i < this.n_goods; i++) {
+  arr.push(['x[' + i + ']']);
+}
+  
+  for (let y = 0; y < arr.length; y++) {
+    
+    let tr = document.createElement('tr');
+    tbody.appendChild(tr);
+    
+    for (let x = 0; x < arr[y].length; x++) {
+      
+      let td = document.createElement('td');
+      tr.appendChild(td);
+      
+      td.innerHTML = (arr[y][x]);
+      if (arr[y][x] + 0 === arr[y][x]) {
+        td.innerHTML = (arr[y][x]).toFixed(3);
+      }
+      
+    }
+  }
+  
+};
 
 Economy.prototype.UPDATE_MARKET_EQUILIBRIUM_TABLE = function() {
 
@@ -61,9 +147,9 @@ Economy.prototype.UPDATE_MARKET_SUMMARY_TABLE = function() {
   }
   
   // THE COLUMN HEADERS
-  arr[0] = ['x','L[0]'];
+  arr[0] = ['&middot;','b[0]'];
   for (let i = 0; i < this.n_goods; i++) {
-    arr[0].push('G[' + i + ']');
+    arr[0].push('x[' + i + ']');
   }
   
   // THE PRICES

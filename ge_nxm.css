@@ -16,7 +16,9 @@ div.section {
  padding: 1vh;
  margin: 1vh;
 }
-
+div.title-cell {
+ font-weight: bold;
+}
 table.mytables {
  border-collapse: collapse;
  padding: 1vh;
@@ -26,11 +28,11 @@ table.mytables td, table.mytables th {
  border: 1px solid #ddd;
  padding: 1vh;
 }
-.mytables thead th {
+.mytables th, .mytables td {
  min-width:30px;
 }
 
-tr.title-row th:hover {
+tr.title-row th:hover, div.section-title:hover {
  background-color: #fafafa;
 }
 
