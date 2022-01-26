@@ -1,11 +1,23 @@
 # ge_nxmxm
 
-There are:
+The basic model: 
 
+https://dactyrafficle.github.io/GE_nxm/
+
+There are:
  * n consumers
- * m firms : 1 good each
- * each firm makes 1 good, which is different from every other good
- 
+ * m firms
+ * m goods (each firm makes 1 good, which is different from every other good)
+ * all firms are owned by consumers thru shares
+
+I'm using this as a starting point to look at more interesting ideas
+  * m firms, but k goods
+  * intermediate goods (ie. one firm makes a good which is an input for another firm)
+  * taxes + government actors
+  * multiple labor markets
+  * inferior goods
+
+
 The approach I'm using to solve this is very naive. 
 
 Every term in every market can be expressed as a combination of exogenous variables, and the price vector.
@@ -18,7 +30,6 @@ The algorithm starts at some price vector, and walks in the direction of improve
 
 The results are easy to verify. But the methodology, I'm not too sure about. It works here, but I don't know what conditions need to be met for it work. Because in other, more complex markets, this method does not work.
 
-https://dactyrafficle.github.io/GE_nxm/
 
 
 I'm using KaTeX to render the bit of math I've added : https://github.com/KaTeX/KaTeX/releases
